@@ -65,6 +65,8 @@ class Account extends Model
     public function setBalance($balance)
     {
         $this->balance = $balance;
+        $this->save();
+        return $this;
     }
 
     public function totalTransactionAmount()
