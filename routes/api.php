@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,5 +20,10 @@ Route::post('/login',[UserController::class,'login']);
 Route::post('/registration',[UserController::class,'registration']);
 
 Route::get('/user',function (Request $request){
-    return response()->json(['user' => Auth::user()]);
-})->middleware('auth:api');
+    if ($request->user()->tokenCan('personal-info')) {
+        return response()->json(['user' => Auth::user()]);
+    }else{
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
+})->middleware(['auth:api']);
+

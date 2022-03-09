@@ -22,7 +22,7 @@ class UserController extends Controller
         if(!Auth::attempt($login)){
             return response()->json(['message' => 'Invalid credentials'],401);
         };
-        $accessToken = Auth::user()->createToken('authToken')->accessToken;
+        $accessToken = Auth::user()->createToken('users',['personal-info']);
         return response()->json(['user' => Auth::user(),'access_token' => $accessToken]);
     }
 
