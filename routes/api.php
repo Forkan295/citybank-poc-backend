@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\WebAuthnLoginController;
+use App\Http\Controllers\Auth\WebAuthnRegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -19,12 +20,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/registration', [UserController::class, 'registration']);
-Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])
-    ->name('webauthn.login');
-Route::post('webauthn/register', [WebAuthnRegisterController::class, 'register'])
-    ->name('webauthn.register');
-Route::group(['middleware' => 'auth:api'], function () {
+Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login');
+Route::post('webauthn/register', [WebAuthnRegisterController::class, 'register'])->name('webauthn.register');
+
+Route::group(['name' => 'v1.','middleware' => 'auth:api'], function () {
     Route::post('/logout', [UserController::class, 'logout']);
-    Route::get('/user', [UserController::class, 'getUser']);
-    Route::get('/user/accounts', [UserController::class, 'getAccounts']);
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/', [UserController::class, 'getUser']);
+        Route::get('/accounts', [UserController::class, 'getAccounts']);
+    });
 });

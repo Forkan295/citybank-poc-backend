@@ -19,6 +19,7 @@ class UserController extends Controller
      */
     public function login(Request $request): JsonResponse
     {
+
         $login = $request->validate([
             'email'    => ['email', 'required'],
             'password' => ['required', 'string'],
@@ -27,7 +28,7 @@ class UserController extends Controller
             return response()->json(['message' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);
         };
         $accessToken = Auth::user()->createToken('users')->accessToken;
-        return response()->json(['user' => Auth::user(), 'access_token' => $accessToken],Response::HTTP_OK);
+        return response()->json(['user' => Auth::user(), 'access_token' => $accessToken], Response::HTTP_OK);
     }
 
     /**
@@ -51,9 +52,9 @@ class UserController extends Controller
      */
     public function logout(): JsonResponse
     {
-        $accessToken = Auth::user()->token();
+        $accessToken = auth()->user()->token();
         $accessToken->revoke();
-        return response()->json(['message' => 'Successfully logged out'],Response::HTTP_OK);
+        return response()->json(['message' => 'Successfully logged out'], Response::HTTP_OK);
     }
 
     /**
@@ -61,12 +62,11 @@ class UserController extends Controller
      */
     public function getUser(): JsonResponse
     {
-        return response()->json(['user' => new UserResource(Auth::user())], Response::HTTP_OK);
+        return response()->json(['user' => new UserResource(auth()->user())], Response::HTTP_OK);
     }
 
     public function getAccounts(): JsonResponse
     {
-        $user = Auth::user();
-        return response()->json(['user' => UserAccountResource::collection($user->accounts)], Response::HTTP_OK);
+        return response()->json(['user' => UserAccountResource::collection(auth()->user()->accounts)], Response::HTTP_OK);
     }
 }
