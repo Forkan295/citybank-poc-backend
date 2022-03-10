@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\WebAuthnLoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -16,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 use App\Http\Controllers\Auth\WebAuthnRegisterController;
-use App\Http\Controllers\Auth\WebAuthnLoginController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -50,6 +50,7 @@ Route::get('/', function () {
 
 Route::post('webauthn/register/options', [WebAuthnRegisterController::class, 'options'])
     ->name('webauthn.register.options');
+
 Route::post('webauthn/register', [WebAuthnRegisterController::class, 'register'])
     ->name('webauthn.register');
 

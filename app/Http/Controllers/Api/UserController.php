@@ -3,42 +3,70 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserAccountResource;
+use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function login(Request $request): \Illuminate\Http\JsonResponse
+    public function login(Request $request): JsonResponse
     {
         $login = $request->validate([
-            'email' => ['email','required'],
-            'password' => ['required','string'],
+            'email'    => ['email', 'required'],
+            'password' => ['required', 'string'],
         ]);
-        if(!Auth::attempt($login)){
-            return response()->json(['message' => 'Invalid credentials'],401);
+        if (!Auth::attempt($login)) {
+            return response()->json(['message' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);
         };
-        $accessToken = Auth::user()->createToken('users',['personal-info']);
-        return response()->json(['user' => Auth::user(),'access_token' => $accessToken]);
+        $accessToken = Auth::user()->createToken('users')->accessToken;
+        return response()->json(['user' => Auth::user(), 'access_token' => $accessToken],Response::HTTP_OK);
     }
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function registration(Request $request): \Illuminate\Http\JsonResponse
+    public function registration(Request $request): JsonResponse
     {
         $registration = $request->validate([
-            'name' => ['required','string'],
-            'email' => ['email','required','unique:users'],
-            'password' => ['required','string','confirmed'],
+            'name'     => ['required', 'string'],
+            'email'    => ['email', 'required', 'unique:users'],
+            'password' => ['required', 'string', 'confirmed'],
         ]);
-        $user = User::create($registration);
-        $accessToken = $user->createToken('authToken')->accessToken;
-        return response()->json(['user' => $user,'access_token' => $accessToken]);
+        $user         = User::create($registration);
+        $accessToken  = $user->createToken('authToken')->accessToken;
+        return response()->json(['user' => $user, 'access_token' => $accessToken]);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function logout(): JsonResponse
+    {
+        $accessToken = Auth::user()->token();
+        $accessToken->revoke();
+        return response()->json(['message' => 'Successfully logged out'],Response::HTTP_OK);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getUser(): JsonResponse
+    {
+        return response()->json(['user' => new UserResource(Auth::user())], Response::HTTP_OK);
+    }
+
+    public function getAccounts(): JsonResponse
+    {
+        $user = Auth::user();
+        return response()->json(['user' => UserAccountResource::collection($user->accounts)], Response::HTTP_OK);
     }
 }
