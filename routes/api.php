@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\WebAuthnLoginController;
+
+use App\Http\Controllers\Auth\WebAuthnRegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -18,16 +20,26 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/login',[UserController::class,'login']);
-Route::post('/registration',[UserController::class,'registration']);
+//Route::post('/registration',[UserController::class,'registration']);
 
+
+
+Route::post('webauthn/register/options', [WebAuthnRegisterController::class, 'options'])
+    ->name('webauthn.register.options');
+Route::post('webauthn/register', [WebAuthnRegisterController::class, 'register'])
+    ->name('webauthn.register');
+
+Route::post('webauthn/login/options', [WebAuthnLoginController::class, 'options'])
+    ->name('webauthn.login.options');
 Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])
     ->name('webauthn.login');
 
-Route::get('/user',function (Request $request){
-    if ($request->user()->tokenCan('personal-info')) {
-        return response()->json(['user' => Auth::user()]);
-    }else{
-        return response()->json(['error' => 'Unauthorized'], 401);
-    }
-})->middleware(['auth:api']);
+
+//Route::get('/user',function (Request $request){
+//    if ($request->user()->tokenCan('personal-info')) {
+//        return response()->json(['user' => Auth::user()]);
+//    }else{
+//        return response()->json(['error' => 'Unauthorized'], 401);
+//    }
+//})->middleware(['auth:api']);
 
