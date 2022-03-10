@@ -16,14 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/login',[UserController::class,'login']);
-Route::post('/registration',[UserController::class,'registration']);
+Route::post('/login', [UserController::class, 'login']);
+Route::post('/registration', [UserController::class, 'registration']);
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::post('/logout', [UserController::class, 'logout']);
+    Route::get('/user', [UserController::class, 'getUser']);
+    Route::get('/user/accounts', [UserController::class, 'getAccounts']);
 
-Route::get('/user',function (Request $request){
-    if ($request->user()->tokenCan('personal-info')) {
-        return response()->json(['user' => Auth::user()]);
-    }else{
-        return response()->json(['error' => 'Unauthorized'], 401);
-    }
-})->middleware(['auth:api']);
+});
+
+
 
