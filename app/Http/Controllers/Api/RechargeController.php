@@ -31,8 +31,9 @@ class RechargeController extends Controller
     	}
 
     	$currentBalance = (int) $userAccount->balance;
-
-    	if ($currentBalance < 50 || $request->balance > $currentBalance) {
+    	$restAccountBalance = $currentBalance - $request->balance;
+    	
+    	if ($restAccountBalance <= 50 || $currentBalance <= 50 || $request->balance > $currentBalance) {
     		return response()->json([
     				'message' => 'You have no sufficient balance!'
     			], 
