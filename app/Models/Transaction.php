@@ -23,6 +23,11 @@ class Transaction extends Model
         'description',
     ];
 
+    const STATUS_PENDING = 0;
+    const STATUS_COMPLETED = 1;
+    const STATUS_FAILED = 2;
+    
+
     /**
      * @return BelongsTo
      */

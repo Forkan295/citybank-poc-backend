@@ -17,9 +17,11 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('account_id')->constrained('accounts')->onDelete('cascade');
+            $table->foreignId('type_id')->constrained('transaction_types')->onDelete('cascade');
+            $table->foreignId('beneficiary_id')->nullable()->constrained('beneficiaries')->onDelete('cascade');
             $table->decimal('amount', 8, 2)->default(0);
-            $table->string('type')->nullable();
             $table->string('description')->nullable();
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }

@@ -55,6 +55,11 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
     {
         return $this->hasMany(Account::class, 'user_id');
     }
+    
+    public function beneficiaries()
+    {
+        return $this->hasMany(Beneficiary::class, 'user_id');
+    }
 
     /**
      * @return HasMany
