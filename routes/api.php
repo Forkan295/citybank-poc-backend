@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BeneficiaryController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\WebAuthnLoginController;
 use App\Http\Controllers\Auth\WebAuthnRegisterController;
@@ -36,10 +37,15 @@ Route::group(['name' => 'v1.'], function () {
     Route::post('/login', [AuthController::class, 'login']);
 
     Route::group(['middleware' => 'auth:api'], function () {
-            Route::post('/logout', [UserController::class, 'logout']);
+        Route::post('/logout', [UserController::class, 'logout']);
         Route::group(['prefix' => 'user'], function () {
             Route::get('/', [UserController::class, 'getUser']);
             Route::get('/accounts', [UserController::class, 'getAccounts']);
+        });
+        Route::group(['prefix' => 'beneficiary'], function () {
+            Route::post('/create', [BeneficiaryController::class, 'store'])->name('beneficiary.create');
+            Route::put('/{beneficiary}', [BeneficiaryController::class, 'update'])->name('beneficiary.update');
+            Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])->name('beneficiary.destroy');
         });
 
     });

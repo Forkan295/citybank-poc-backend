@@ -11,7 +11,7 @@ class Beneficiary extends Model
 
     protected $fillable = [
         'name',
-        'acount_id',
+        'account_id',
         'user_id',
         'account_no',
         'bank_name',
@@ -20,7 +20,7 @@ class Beneficiary extends Model
         'routing_number',
         'currency',
         'status',
-        
+
     ];
 
     public function user()
