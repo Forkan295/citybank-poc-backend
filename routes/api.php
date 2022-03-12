@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\RechargeController;
 use App\Http\Controllers\Auth\WebAuthnLoginController;
 use App\Http\Controllers\Auth\WebAuthnRegisterController;
 use Illuminate\Http\Request;
@@ -30,3 +31,5 @@ Route::group(['name' => 'v1.', 'middleware' => 'auth:api'], function () {
         Route::get('/accounts', [UserController::class, 'getAccounts']);
     });
 });
+
+Route::post('recharge', [RechargeController::class, 'recharge']);

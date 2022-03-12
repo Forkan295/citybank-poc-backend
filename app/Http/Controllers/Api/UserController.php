@@ -19,7 +19,6 @@ class UserController extends Controller
      */
     public function login(Request $request): JsonResponse
     {
-
         $login = $request->validate([
             'email'    => ['email', 'required'],
             'password' => ['required', 'string'],
