@@ -26,13 +26,18 @@ class RechargeController extends Controller
     		return response()->json([
     				'message' => 'You don\'t have primary account!'
     			],
-    			Response::HTTP_NOT_FOUND);
+    			Response::HTTP_NOT_FOUND
+    		);
     	}
 
     	$currentBalance = (int) $userAccount->balance;
 
     	if ($currentBalance < 50 || $request->balance > $currentBalance) {
-    		return response()->json(['message' => 'You have no sufficient balance!'], Response::HTTP_NOT_FOUND);
+    		return response()->json([
+    				'message' => 'You have no sufficient balance!'
+    			], 
+    			Response::HTTP_NOT_FOUND
+    		);
     	} 
     	
     	DB::beginTransaction();
@@ -64,11 +69,17 @@ class RechargeController extends Controller
 
     		$afterRechargeTotalBalance = $accountBalance - $request->balance;
 
-    		$transaction->account()->update(['balance' => $afterRechargeTotalBalance]);
+    		$transaction->account()->update([
+    			'balance' => $afterRechargeTotalBalance
+    		]);
     		
     		DB::commit();
 
-    		return response()->json(['message' => 'You have successfully recharged.'], Response::HTTP_OK);
+    		return response()->json([
+	    			'message' => 'You have successfully recharged.'
+	    		], 
+	    		Response::HTTP_OK
+	    	);
     	} catch (\Exception $e) {
 		    DB::rollback();
 		    throw $e;
