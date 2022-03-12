@@ -24,6 +24,7 @@ class UserController extends Controller
             'email'    => ['email', 'required'],
             'password' => ['required', 'string'],
         ]);
+
         if (!Auth::attempt($login)) {
             return response()->json(['message' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);
         };

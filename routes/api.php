@@ -23,7 +23,7 @@ Route::post('/registration', [UserController::class, 'registration']);
 Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login');
 Route::post('webauthn/register', [WebAuthnRegisterController::class, 'register'])->name('webauthn.register');
 
-Route::group(['name' => 'v1.','middleware' => 'auth:api'], function () {
+Route::group(['name' => 'v1.', 'middleware' => 'auth:api'], function () {
     Route::post('/logout', [UserController::class, 'logout']);
     Route::group(['prefix' => 'user'], function () {
         Route::get('/', [UserController::class, 'getUser']);
