@@ -31,19 +31,12 @@ class Transaction extends Model
         return $this->belongsTo(Account::class, 'account_id');
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    public function getAccount()
-    {
-        return $this->account()->first();
-    }
-
-    public function getUser()
-    {
-        return $this->user()->first();
     }
 
 }

@@ -17,7 +17,7 @@ class UserAccountResource extends JsonResource
         return [
             'id' => $this->id,
             'accountNo' => $this->account_no,
-            'accountType' => $this->getAccountTypeName(),
+            'accountType' => $this->accountTypeName,
             'dateOpened' => $this->date_opened,
             'balance' => $this->balance,
         ];
