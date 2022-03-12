@@ -37,13 +37,12 @@ Route::group(['name' => 'v1.'], function () {
     Route::post('/login', [AuthController::class, 'login']);
 
     Route::group(['middleware' => 'auth:api'], function () {
-            Route::post('/logout', [UserController::class, 'logout']);
+        Route::post('/logout', [UserController::class, 'logout']);
         Route::group(['prefix' => 'user'], function () {
             Route::get('/', [UserController::class, 'getUser']);
             Route::get('/accounts', [UserController::class, 'getAccounts']);
         });
 
+		Route::post('recharge', [RechargeController::class, 'recharge']);
     });
 });
-
-Route::post('recharge', [RechargeController::class, 'recharge']);

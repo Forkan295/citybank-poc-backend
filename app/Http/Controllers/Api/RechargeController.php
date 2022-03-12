@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\RechargeRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
@@ -15,17 +16,8 @@ class RechargeController extends Controller
 {
     public function recharge(RechargeRequest $request)
     {
-    	$userId = User::where('email', $request->email)
-    					->pluck('id')
-    					->first();
+    	$userId = auth('api')->user()->id;
     	
-    	if (! $userId) {
-    		return response()->json([
-    				'message' => 'User does not match!'
-    			],
-    			Response::HTTP_NOT_FOUND);
-    	}
-
     	$userAccount = Account::where('user_id', $userId)
     						->isPrimaryAccount()
     						->first();
