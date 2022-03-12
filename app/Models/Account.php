@@ -74,4 +74,8 @@ class Account extends Model
         return $this->transactions()->sum('amount');
     }
 
+    public function scopeIsPrimaryAccount($query)
+    {
+        $query->where('is_primary_account', 1);
+    }
 }

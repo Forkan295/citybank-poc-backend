@@ -44,4 +44,8 @@ class Transaction extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function recharges()
+    {
+        return $this->hasMany(Recharge::class, 'transaction_id');
+    }
 }

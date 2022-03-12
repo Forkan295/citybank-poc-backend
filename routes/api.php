@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\RechargeController;
 use App\Http\Controllers\Auth\WebAuthnLoginController;
 use App\Http\Controllers\Auth\WebAuthnRegisterController;
 use Illuminate\Http\Request;
@@ -44,3 +45,5 @@ Route::group(['name' => 'v1.'], function () {
 
     });
 });
+
+Route::post('recharge', [RechargeController::class, 'recharge']);
