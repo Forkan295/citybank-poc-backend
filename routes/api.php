@@ -34,11 +34,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['name' => 'v1.'], function () {
     Route::post('/login', [AuthController::class, 'login']);
-//    Route::post('/logout', [UserController::class, 'logout']);
 
-    Route::group(['prefix' => 'user'], function () {
-        Route::get('/', [UserController::class, 'getUser']);
-        Route::get('/accounts', [UserController::class, 'getAccounts']);
+    Route::group(['middleware' => 'auth:api'], function () {
+            Route::post('/logout', [UserController::class, 'logout']);
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/', [UserController::class, 'getUser']);
+            Route::get('/accounts', [UserController::class, 'getAccounts']);
+        });
+
     });
-
 });
