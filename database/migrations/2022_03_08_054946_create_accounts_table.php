@@ -20,6 +20,7 @@ class CreateAccountsTable extends Migration
             $table->foreignId('type_id')->constrained('account_types')->onDelete('cascade');
             $table->date('date_opened');
             $table->decimal('balance', 8, 2)->default(0);
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
