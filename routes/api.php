@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\WebAuthnLoginController;
 use App\Http\Controllers\Auth\WebAuthnRegisterController;
@@ -18,15 +19,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/login', [UserController::class, 'login']);
-Route::post('/registration', [UserController::class, 'registration']);
-Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login');
-Route::post('webauthn/register', [WebAuthnRegisterController::class, 'register'])->name('webauthn.register');
+//Route::post('/login', [UserController::class, 'login']);
+//Route::post('/registration', [UserController::class, 'registration']);
+//Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login');
+//Route::post('webauthn/register', [WebAuthnRegisterController::class, 'register'])->name('webauthn.register');
 
-Route::group(['name' => 'v1.', 'middleware' => 'auth:api'], function () {
-    Route::post('/logout', [UserController::class, 'logout']);
-    Route::group(['prefix' => 'user'], function () {
-        Route::get('/', [UserController::class, 'getUser']);
-        Route::get('/accounts', [UserController::class, 'getAccounts']);
+//Route::group(['name' => 'v1.', 'middleware' => 'auth:api'], function () {
+//    Route::post('/logout', [UserController::class, 'logout']);
+//    Route::group(['prefix' => 'user'], function () {
+//        Route::get('/', [UserController::class, 'getUser']);
+//        Route::get('/accounts', [UserController::class, 'getAccounts']);
+//    });
+//});
+
+Route::group(['name' => 'v1.'], function () {
+    Route::post('/login', [AuthController::class, 'login']);
+
+    Route::group(['middleware' => 'auth:api'], function () {
+            Route::post('/logout', [UserController::class, 'logout']);
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/', [UserController::class, 'getUser']);
+            Route::get('/accounts', [UserController::class, 'getAccounts']);
+        });
+
     });
 });
