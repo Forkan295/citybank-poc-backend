@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BeneficiaryController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\RechargeController;
 use App\Http\Controllers\Auth\WebAuthnLoginController;
@@ -41,6 +42,11 @@ Route::group(['name' => 'v1.'], function () {
         Route::group(['prefix' => 'user'], function () {
             Route::get('/', [UserController::class, 'getUser']);
             Route::get('/accounts', [UserController::class, 'getAccounts']);
+        });
+        Route::group(['prefix' => 'beneficiary'], function () {
+            Route::post('/create', [BeneficiaryController::class, 'store'])->name('beneficiary.create');
+            Route::put('/{beneficiary}', [BeneficiaryController::class, 'update'])->name('beneficiary.update');
+            Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])->name('beneficiary.destroy');
         });
 
 		Route::post('recharge', [RechargeController::class, 'recharge']);
