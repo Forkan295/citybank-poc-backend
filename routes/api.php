@@ -51,5 +51,13 @@ Route::group(['name' => 'v1.'], function () {
         });
 
 		Route::post('recharge', [RechargeController::class, 'recharge']);
+
+
+
+        Route::post('webauthn/register/options', [WebAuthnRegisterController::class, 'options'])
+            ->name('webauthn.register.options');
+        Route::post('webauthn/register', [WebAuthnRegisterController::class, 'register'])
+            ->name('webauthn.register');
+
     });
 });
