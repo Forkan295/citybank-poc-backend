@@ -47,6 +47,16 @@ Route::get('/', function () {
 //    return $response->json();
 //});
 
+Route::group(['middleware' => ['auth']], function () {
+
+    Route::get('/oauth/clients',function(Request $request){
+            return view('oauth.clients',[
+                'clients'=> $request->user()->clients
+            ]);
+    })->name('oauth.authorized');
+
+});
+
 
 Route::post('webauthn/register/options', [WebAuthnRegisterController::class, 'options'])
     ->name('webauthn.register.options');
@@ -60,8 +70,10 @@ Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])
     ->name('webauthn.login');
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('/dashboard', function (Request $request) {
+    return view('dashboard',[
+        'clients'=> $request->user()->clients
+    ]);
 })->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
