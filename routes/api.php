@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BeneficiaryController;
 use App\Http\Controllers\Api\UserController;
@@ -38,12 +39,11 @@ Route::group(['name' => 'v1.'], function () {
     Route::post('/login', [AuthController::class, 'login']);
 
     Route::group(['middleware' => 'auth:api'], function () {
-        Route::post('/logout', [UserController::class, 'logout']);
         Route::group(['prefix' => 'user'], function () {
-            Route::get('/', [AuthController::class, 'myProfile']);
-//            Route::get('/', [UserController::class, 'getUser']);
-            Route::get('/accounts', [UserController::class, 'getAccounts']);
+            Route::get('/', [AuthController::class, 'getProfile']);
+            Route::get('/accounts', [AccountController::class, 'getAccounts']);
         });
+
         Route::group(['prefix' => 'beneficiary'], function () {
             Route::get('/', [BeneficiaryController::class, 'index'])->name('beneficiary.index');
             Route::post('/create', [BeneficiaryController::class, 'store'])->name('beneficiary.create');
@@ -51,14 +51,18 @@ Route::group(['name' => 'v1.'], function () {
             Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])->name('beneficiary.destroy');
         });
 
-		Route::post('recharge', [RechargeController::class, 'recharge']);
+        Route::post('recharge', [RechargeController::class, 'recharge']);
 
 
+        //=========== biometric login and register ===========================
+        Route::group(['prefix' => 'webauthn'], function () {
+            Route::post('/login/options', [WebAuthnLoginController::class, 'options'])->name('webauthn.login.options');
+            Route::post('/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login');
 
-        Route::post('webauthn/register/options', [WebAuthnRegisterController::class, 'options'])
-            ->name('webauthn.register.options');
-        Route::post('webauthn/register', [WebAuthnRegisterController::class, 'register'])
-            ->name('webauthn.register');
-
+            Route::post('/register/options', [WebAuthnRegisterController::class, 'options'])->name('webauthn.register.options');
+            Route::post('/register', [WebAuthnRegisterController::class, 'register'])->name('webauthn.register');
+        });
+        //logout user
+        Route::post('/logout', [UserController::class, 'logout']);
     });
 });

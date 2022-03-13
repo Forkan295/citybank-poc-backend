@@ -23,6 +23,10 @@ class Account extends Model
         'balance',
     ];
 
+    protected $casts = [
+        'is_primary_account' => 'boolean'
+    ];
+
     /**
      * @return BelongsTo
      */

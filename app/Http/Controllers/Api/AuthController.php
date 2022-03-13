@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 
-
 class AuthController extends Controller
 {
     /**
@@ -36,7 +35,10 @@ class AuthController extends Controller
                 return app(ApiResponse::class)->error(MessageEnum::INVALID_CREDENTIAL);
             }
             $accessToken = auth()->user()->createToken('users')->accessToken;
-            return app(ApiResponse::class)->success(['access_token' => $accessToken]);
+            $user        = $authService->getUserData($request->user());
+
+
+            return app(ApiResponse::class)->success([ 'access_token' => $accessToken, 'user' => $user]);
         } catch (\Exception $e) {
             Log::error($e);
             return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION);
@@ -44,7 +46,7 @@ class AuthController extends Controller
     }
 
 
-    public function myProfile(Request $request)
+    public function getProfile(Request $request)
     {
         try {
             $authService = new AuthService();
