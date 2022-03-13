@@ -44,6 +44,7 @@ Route::group(['name' => 'v1.'], function () {
             Route::get('/accounts', [UserController::class, 'getAccounts']);
         });
         Route::group(['prefix' => 'beneficiary'], function () {
+            Route::get('/', [BeneficiaryController::class, 'index'])->name('beneficiary.index');
             Route::post('/create', [BeneficiaryController::class, 'store'])->name('beneficiary.create');
             Route::put('/{beneficiary}', [BeneficiaryController::class, 'update'])->name('beneficiary.update');
             Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])->name('beneficiary.destroy');

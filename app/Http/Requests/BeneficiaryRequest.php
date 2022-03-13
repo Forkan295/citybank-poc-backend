@@ -24,27 +24,14 @@ class BeneficiaryRequest extends FormRequest
      */
     public function rules()
     {
-        if(request()->route('beneficiary.create'))
-        {
-            $account_no_required = 'required';
-            $account_no_unique = 'unique:beneficiaries';
-            $name = 'required';
-            $routing_number = 'required';
-        }else{
-            $account_no_required = 'nullable';
-            $account_no_unique = '';
-            $name = 'nullable';
-            $routing_number = 'nullable';
-        }
         return [
-            'account_no'     => [Rule::when(request()->isMethod('post'), 'required|unique:beneficiaries',),Rule::when(request()->isMethod('post'), 'nullable') ],
-            'name'           => [Rule::when(request()->isMethod('post'), 'required'),Rule::when(request()->isMethod('put'), 'nullable')],
-//            'phone' => 'required',
-            'routing_number' => [Rule::when(request()->isMethod('post'), 'required'),Rule::when(request()->isMethod('put'), 'nullable')],
-            'bank_name'      => [Rule::when(request()->isMethod('post'), 'required'),Rule::when(request()->isMethod('put'), 'nullable')],
-            'branch_name'    => [Rule::when(request()->isMethod('post'), 'required'),Rule::when(request()->isMethod('put'), 'nullable')],
-            'branch_city'    => [Rule::when(request()->isMethod('post'), 'required'),Rule::when(request()->isMethod('put'), 'nullable')],
-            'currency'       => [Rule::when(request()->isMethod('post'), 'required'),Rule::when(request()->isMethod('put'), 'nullable')],
+            'account_no'     => ['required',Rule::unique('beneficiaries')->ignore($this->beneficiary)],
+            'name'           => ['required','string'],
+            'routing_number' => ['required','string'],
+            'bank_name'      => ['required','string'],
+            'branch_name'    => ['required','string'],
+            'branch_city'    => ['required','string'],
+            'currency'       => ['required','string'],
         ];
     }
 }

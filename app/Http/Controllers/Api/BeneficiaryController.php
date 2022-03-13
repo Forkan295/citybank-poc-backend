@@ -17,6 +17,15 @@ use Illuminate\Support\Facades\DB;
 class BeneficiaryController extends Controller
 {
     /**
+     * @return JsonResponse
+     */
+    public function index(): JsonResponse
+    {
+        $beneficiaries = Beneficiary::whereStatus(1)->get();
+        return ApiResponse::success(BeneficiaryResource::collection($beneficiaries), 'Success');
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param BeneficiaryRequest $request
@@ -24,16 +33,13 @@ class BeneficiaryController extends Controller
      */
     public function store(BeneficiaryRequest $request): JsonResponse
     {
-        DB::beginTransaction();
         try {
             $user = auth('api')->user();
             $request->merge(['user_id' => $user->id]);
             $beneficiary = Beneficiary::create($request->all());
-            DB::commit();
-            return response()->json(['response' => ApiResponse::success(new BeneficiaryResource($beneficiary), 'Beneficiary created successfully')], Response::HTTP_OK);
+            return ApiResponse::success(new BeneficiaryResource($beneficiary), 'Beneficiary created successfully');
         } catch (\Exception $exception) {
-            DB::rollback();
-            return ApiResponse::error(ResponseStatusCode::FAILED, $exception->getMessage());
+            return ApiResponse::error($exception->getMessage());
         }
 
 
@@ -59,14 +65,11 @@ class BeneficiaryController extends Controller
      */
     public function update(BeneficiaryRequest $request, Beneficiary $beneficiary): JsonResponse
     {
-        DB::beginTransaction();
         try {
             $beneficiary->update($request->all());
-            DB::commit();
-            return response()->json(['response' => ApiResponse::success(new BeneficiaryResource($beneficiary), 'Beneficiary Updated successfully')], Response::HTTP_OK);
-        } catch (\Exception $exception) {
-            DB::rollback();
-            return response()->json(['response' => ApiResponse::error(null, $exception->getMessage())], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return ApiResponse::success(new BeneficiaryResource($beneficiary), 'Beneficiary updated successfully');
+        } catch (\Throwable $exception) {
+            return response()->json(['response' => ApiResponse::error($exception->getMessage())]);
         }
     }
 
@@ -81,10 +84,10 @@ class BeneficiaryController extends Controller
         try {
             $beneficiary->delete();
             DB::commit();
-            return response()->json(['response' => ApiResponse::success([], 'Beneficiary Deleted successfully')], Response::HTTP_OK);
+            return ApiResponse::success([], 'Beneficiary Deleted successfully');
         } catch (\Exception $exception) {
             DB::rollback();
-            return response()->json(['response' => ApiResponse::error(null, $exception->getMessage())], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return ApiResponse::error($exception->getMessage());
         }
     }
 }
