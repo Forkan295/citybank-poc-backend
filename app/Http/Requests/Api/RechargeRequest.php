@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Response\ApiResponse;
+use App\Models\Account;
 
 class RechargeRequest extends FormRequest
 {
@@ -38,7 +40,19 @@ class RechargeRequest extends FormRequest
         return [
             'operator_name' => ['required', 'string'],
             'phone_number' => $rules,
-            'balance' => ['required', 'integer', 'min:10', 'max:100'],
+            'recharge_amount' => ['required', 'integer', 'min:10', 'max:100'],
         ];
+    }
+
+
+    public function checkUserBalance($currentBalance, $rechargeBalance)
+    {
+        $restAccountBalance = (int) $currentBalance - $rechargeBalance;
+
+        if ($restAccountBalance <= 50 || $currentBalance <= 50 || $rechargeBalance > $currentBalance) {
+            return true;
+        }
+
+        return false;
     }
 }
