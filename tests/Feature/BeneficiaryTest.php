@@ -2,12 +2,25 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class BeneficiaryTest extends TestCase
 {
+    use RefreshDatabase;
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->initDatabase();
+    }
+
+    public function tearDown(): void
+    {
+        $this->resetDatabase();
+        parent::tearDown();
+    }
 
     /** @test */
     public function can_create_beneficiary()
