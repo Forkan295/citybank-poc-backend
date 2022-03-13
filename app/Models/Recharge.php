@@ -13,7 +13,7 @@ class Recharge extends Model
     	'transaction_id',
     	'operator_name',
     	'phone_number',
-    	'balance',
+    	'recharge_amount',
     	'status',
     ];
 

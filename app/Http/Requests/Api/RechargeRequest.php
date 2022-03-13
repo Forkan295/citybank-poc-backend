@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RechargeRequest extends FormRequest
 {
@@ -33,12 +34,30 @@ class RechargeRequest extends FormRequest
             $rules = ['required', 'digits:11', 'regex:/^018\d{8}$/'];
         } elseif ($this->operator_name == 'teletalk') {
             $rules = ['required', 'digits:11', 'regex:/^015\d{8}$/'];
+        } else {
+            $rules = [];
         }
 
         return [
-            'operator_name' => ['required', 'string'],
+            'operator_name' => [
+                'required', 
+                'string', 
+                Rule::in(['grameenphone', 'banglalink', 'airtel', 'robi', 'teletalk'])
+            ],
             'phone_number' => $rules,
-            'balance' => ['required', 'integer', 'min:10', 'max:100'],
+            'recharge_amount' => ['required', 'integer', 'min:10', 'max:1000'],
         ];
+    }
+
+
+    public function checkUserBalance($currentBalance, $rechargeBalance)
+    {
+        $restAccountBalance = (int) $currentBalance - $rechargeBalance;
+
+        if ($restAccountBalance <= 20 || $currentBalance <= 20 || $rechargeBalance > $currentBalance) {
+            return true;
+        }
+
+        return false;
     }
 }

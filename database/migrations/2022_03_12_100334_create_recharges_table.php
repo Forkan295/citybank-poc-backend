@@ -18,7 +18,7 @@ class CreateRechargesTable extends Migration
             $table->foreignId('transaction_id')->constrained('transactions')->onDelete('cascade');
             $table->string('operator_name');
             $table->string('phone_number');
-            $table->decimal('balance', 8, 2);
+            $table->decimal('recharge_amount', 8, 2);
             $table->boolean('status');
             $table->timestamps();
         });
