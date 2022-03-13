@@ -49,7 +49,7 @@ class AuthController extends Controller
         try {
             $authService = new AuthService();
             $user        = $authService->getUserData($request->user());
-            return app(ApiResponse::class)->success(['user' => $user]);
+            return app(ApiResponse::class)->success($user);
         } catch (\Exception $e) {
             Log::error($e);
             return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION);
