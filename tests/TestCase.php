@@ -13,6 +13,7 @@ abstract class TestCase extends BaseTestCase
     {
 
         Artisan::call('migrate');
+        Artisan::call('db:seed');
     }
 
     protected function resetDatabase()
