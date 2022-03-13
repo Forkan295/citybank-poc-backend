@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\MessageEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UserAccountResource;
-use App\Http\Resources\UserResource;
-use App\Models\User;
+use App\Http\Response\ApiResponse;
+use App\Service\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+
+
 
 class AuthController extends Controller
 {
@@ -19,33 +22,38 @@ class AuthController extends Controller
      */
     public function login(Request $request): JsonResponse
     {
+        $authService = new AuthService();
 
-        $login = $request->validate([
-            'email'    => ['email', 'required'],
-            'password' => ['required', 'string'],
-        ]);
+        $validator = Validator::make($request->all(), $authService->basicRules());
 
-        if (!Auth::attempt($login)) {
-            return response()->json(['message' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);
-        };
-        $accessToken = Auth::user()->createToken('users')->accessToken;
-        return response()->json(['user' => Auth::user(), 'access_token' => $accessToken], Response::HTTP_OK);
+        if ($validator->fails()) {
+            return app(ApiResponse::class)->validationError($validator->errors());
+        }
+
+        try {
+            $credential = $authService->matchCredentials($request);
+            if (!$credential) {
+                return app(ApiResponse::class)->error(MessageEnum::INVALID_CREDENTIAL);
+            }
+            $accessToken = auth()->user()->createToken('users')->accessToken;
+            return app(ApiResponse::class)->success(['access_token' => $accessToken]);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION);
+        }
     }
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function registration(Request $request): JsonResponse
+
+    public function myProfile(Request $request)
     {
-        $registration = $request->validate([
-            'name'     => ['required', 'string'],
-            'email'    => ['email', 'required', 'unique:users'],
-            'password' => ['required', 'string', 'confirmed'],
-        ]);
-        $user         = User::create($registration);
-        $accessToken  = $user->createToken('authToken')->accessToken;
-        return response()->json(['user' => $user, 'access_token' => $accessToken]);
+        try {
+            $authService = new AuthService();
+            $user        = $authService->getUserData($request->user());
+            return app(ApiResponse::class)->success(['user' => $user]);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION);
+        }
     }
 
     /**
@@ -56,18 +64,5 @@ class AuthController extends Controller
         $accessToken = auth()->user()->token();
         $accessToken->revoke();
         return response()->json(['message' => 'Successfully logged out'], Response::HTTP_OK);
-    }
-
-    /**
-     * @return JsonResponse
-     */
-    public function getUser(): JsonResponse
-    {
-        return response()->json(['user' => new UserResource(auth()->user())], Response::HTTP_OK);
-    }
-
-    public function getAccounts(): JsonResponse
-    {
-        return response()->json(['user' => UserAccountResource::collection(auth()->user()->accounts)], Response::HTTP_OK);
     }
 }
