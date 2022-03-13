@@ -38,7 +38,8 @@ Route::group(['name' => 'v1.'], function () {
     Route::group(['middleware' => 'auth:api'], function () {
             Route::post('/logout', [UserController::class, 'logout']);
         Route::group(['prefix' => 'user'], function () {
-            Route::get('/', [UserController::class, 'getUser']);
+            Route::get('/', [AuthController::class, 'myProfile']);
+//            Route::get('/', [UserController::class, 'getUser']);
             Route::get('/accounts', [UserController::class, 'getAccounts']);
         });
 
