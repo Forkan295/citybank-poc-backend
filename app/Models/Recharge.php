@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
 
 class Recharge extends Model
@@ -17,7 +18,10 @@ class Recharge extends Model
     	'status',
     ];
 
-    public function transaction()
+    /**
+     * @return BelongsTo
+     */
+    public function transaction(): BelongsTo
     {
         return $this->belongsTo(Transaction::class, 'transaction_id');
     }

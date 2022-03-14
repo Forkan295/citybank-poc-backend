@@ -4,6 +4,7 @@ namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Models\Account;
 
 class RechargeRequest extends FormRequest
 {
@@ -50,14 +51,26 @@ class RechargeRequest extends FormRequest
     }
 
 
-    public function checkUserBalance($currentBalance, $rechargeBalance)
-    {
-        $restAccountBalance = (int) $currentBalance - $rechargeBalance;
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    public function withValidator($factory) {
+        $userId = auth('api')->user()->id;
 
-        if ($restAccountBalance <= 20 || $currentBalance <= 20 || $rechargeBalance > $currentBalance) {
-            return true;
-        }
+        $userAccount = Account::where('user_id', $userId)
+                                ->first();
 
-        return false;
+        $factory->after(function ($factory) use ($userAccount) {
+            $balance = (int) $userAccount->balance - $this->recharge_amount;
+
+            if ($balance < 0 || $this->recharge_amount > $userAccount->balance) {
+                $factory->errors()->add('message', 'You have no sufficient balance!');
+            }
+        });
+
+        return $factory;
     }
 }
