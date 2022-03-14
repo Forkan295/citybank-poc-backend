@@ -61,4 +61,48 @@ class BeneficiaryTest extends TestCase
         ], ['Accept' => 'application/json', 'Authorization' => 'Bearer '.$this->token])->assertStatus(200);
 
     }
+
+    /** @test */
+    public function can_update_beneficiary()
+    {
+        $this->testOauthLogin();
+
+        $this->json('POST', route('beneficiary.create'), [
+            'account_no'     => '1234567dd89',
+            'name'           => 'John Doe',
+            'routing_number' => '123456789',
+            'bank_name'      => 'Bank of America',
+            'branch_name'    => 'Bank of America',
+            'branch_city'    => 'Bank of America',
+            'currency'       => 'USD',
+        ], ['Accept' => 'application/json', 'Authorization' => 'Bearer '.$this->token]);
+
+        $this->json('PUT', route('beneficiary.update', 2), [
+            'account_no'     => '123456789',
+            'name'           => 'John Doe',
+            'routing_number' => '123456789',
+            'bank_name'      => 'Bank of America',
+            'branch_name'    => 'Bank of America',
+            'branch_city'    => 'Bank of America',
+            'currency'       => 'USD',
+        ], ['Accept' => 'application/json', 'Authorization' => 'Bearer '.$this->token])->assertStatus(200);
+    }
+
+    /** @test */
+    public function can_delete_beneficiary()
+    {
+        $this->testOauthLogin();
+
+        $this->json('POST', route('beneficiary.create'), [
+            'account_no'     => '123456789',
+            'name'           => 'John Doe',
+            'routing_number' => '123456789',
+            'bank_name'      => 'Bank of America',
+            'branch_name'    => 'Bank of America',
+            'branch_city'    => 'Bank of America',
+            'currency'       => 'USD',
+        ], ['Accept' => 'application/json', 'Authorization' => 'Bearer '.$this->token]);
+
+        $this->json('DELETE', route('beneficiary.destroy', 3), [], ['Accept' => 'application/json', 'Authorization' => 'Bearer '.$this->token])->assertStatus(200);
+    }
 }
