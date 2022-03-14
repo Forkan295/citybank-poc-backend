@@ -16,7 +16,7 @@ class TransactionTypeSeeder extends Seeder
          $types  = [
             'Ac to AC',
             'Other bank',
-            'Recharge',
+            'recharge',
         ];
 
         foreach ($types as $type) {

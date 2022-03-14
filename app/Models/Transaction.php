@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Transaction extends Model
 {
@@ -18,9 +19,11 @@ class Transaction extends Model
     protected $fillable = [
         'user_id',
         'account_id',
+        'type_id',
+        'beneficiary_id',
         'amount',
-        'type',
         'description',
+        'status',
     ];
 
     const STATUS_PENDING = 0;
@@ -44,8 +47,11 @@ class Transaction extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function recharges()
+    /**
+     * @return HasOne
+     */
+    public function recharge(): HasOne
     {
-        return $this->hasMany(Recharge::class, 'transaction_id');
+        return $this->hasOne(Recharge::class, 'transaction_id');
     }
 }

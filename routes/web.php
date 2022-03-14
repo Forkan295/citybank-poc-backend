@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\WebAuthnLoginController;
+use App\Http\Controllers\ActivityLogController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -70,10 +71,16 @@ Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])
     ->name('webauthn.login');
 
 
-Route::get('/dashboard', function (Request $request) {
-    return view('dashboard',[
-        'clients'=> $request->user()->clients
-    ]);
-})->middleware(['auth'])->name('dashboard');
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/dashboard', function (Request $request) {
+        return view('dashboard',[
+            'clients'=> $request->user()->clients
+        ]);
+    })->name('dashboard');
+
+    Route::get('activity-log', [ActivityLogController::class, 'index'])->name('activity_log.index');
+    Route::get('activity-log/{id}/show', [ActivityLogController::class, 'show'])->name('activity_log.show');
+});
 
 require __DIR__.'/auth.php';
