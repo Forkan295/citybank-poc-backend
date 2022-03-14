@@ -38,6 +38,12 @@ use Illuminate\Support\Facades\Route;
 Route::group(['name' => 'v1.'], function () {
     Route::post('/login', [AuthController::class, 'login']);
 
+    Route::group(['prefix' => 'webauthn'], function () {
+        Route::post('/login/options', [WebAuthnLoginController::class, 'options'])->name('webauthn.login.options');
+        Route::post('/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login');
+    });
+
+
     Route::group(['middleware' => 'auth:api'], function () {
         Route::group(['prefix' => 'user'], function () {
             Route::get('/', [AuthController::class, 'getProfile']);
@@ -56,9 +62,6 @@ Route::group(['name' => 'v1.'], function () {
 
         //=========== biometric login and register ===========================
         Route::group(['prefix' => 'webauthn'], function () {
-            Route::post('/login/options', [WebAuthnLoginController::class, 'options'])->name('webauthn.login.options');
-            Route::post('/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login');
-
             Route::post('/register/options', [WebAuthnRegisterController::class, 'options'])->name('webauthn.register.options');
             Route::post('/register', [WebAuthnRegisterController::class, 'register'])->name('webauthn.register');
         });
