@@ -18,9 +18,11 @@ class Transaction extends Model
     protected $fillable = [
         'user_id',
         'account_id',
+        'type_id',
+        'beneficiary_id',
         'amount',
-        'type',
         'description',
+        'status',
     ];
 
     const STATUS_PENDING = 0;

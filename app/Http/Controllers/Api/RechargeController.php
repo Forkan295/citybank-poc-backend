@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Response\ApiResponse;
 use Illuminate\Support\Facades\DB;
+use App\Models\TransactionType;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
@@ -17,18 +18,16 @@ use App\Models\User;
 class RechargeController extends Controller
 {
 	public $userId;
-
 	public $userAccount;
-
 	public $currentBalance;
+	public $transactionType;
 
 	public function __construct()
 	{
 		$this->userId = $this->getUserId();
-
 		$this->userAccount = $this->getUserAccount();
-
 		$this->currentBalance = $this->getUserCurrentBalance();
+		$this->transactionType = $this->getTransactionTypeId('recharge');
 	}
 
     public function recharge(RechargeRequest $request)
@@ -50,8 +49,9 @@ class RechargeController extends Controller
 	    		'user_id' => $this->userId,
 	    		'account_id' => $this->userAccount->id,
 	    		'amount' => $request->recharge_amount,
-	    		'type' => 'recharge',
+	    		'type_id' => $this->transactionType,
 	    		'description' => 'Recharge',
+	    		'status' => true,
 	    	];
 
     		$transaction = Transaction::create($data);
@@ -71,7 +71,25 @@ class RechargeController extends Controller
     		$transaction->account()->update([
     			'balance' => $balance
     		]);
+    	
+    		$activityLog = [
+	    		'account_id' => $this->userAccount->id,
+	    		'account_number' => $this->userAccount->account_no,
+	    		'type_id' => $this->transactionType,
+	    		'type_name' => 'recharge',
+	    		'account_balance_before_recharge' => $this->currentBalance,
+	    		'account_balance_after_recharge' => $balance,
+	    		'recharge_amount' => $request->recharge_amount,
+	    		'operator_name' => $request->operator_name,
+	    		'phone_number' => $request->phone_number,
+	    		'description' => 'Recharge',
+	    		'status' => true,
+    		];
     		
+    		activity('recharge')
+    			->withProperties($activityLog)
+    			->log('Recharge');
+
     		DB::commit();
 
     		return app(ApiResponse::class)->success([
@@ -101,5 +119,14 @@ class RechargeController extends Controller
     private function getUserCurrentBalance()
     {
     	return $this->userAccount ? $this->userAccount->balance : 0;
+    }
+
+    protected function getTransactionTypeId($typeName)
+    {
+    	$typeId = TransactionType::where('name', $typeName)
+    						->pluck('id')
+    						->first();
+
+    	return $typeId;
     }
 }

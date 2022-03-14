@@ -18,6 +18,7 @@ class TransactionTypeSeeder extends Seeder
             'withdraw',
             'bank-transfer',
             'other-transfer',
+            'recharge',
         ];
 
         foreach ($types as $type) {
