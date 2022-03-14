@@ -14,10 +14,9 @@ class TransactionTypeSeeder extends Seeder
     public function run()
     {
          $types  = [
-            'deposit',
-            'withdraw',
-            'bank-transfer',
-            'other-transfer',
+            'Ac to AC',
+            'Other bank',
+            'Recharge',
         ];
 
         foreach ($types as $type) {

@@ -30,14 +30,14 @@ class TransactionSeeder extends Seeder
             ],
             [
                 'account_id' => 1,
-                'user_id' => 2,
+                'user_id' => 1,
                 'type_id' => 3,
                 'amount' => 100,
                 'description' => 'Deposit',
             ],
             [
                 'account_id' => 4,
-                'user_id' => 3,
+                'user_id' => 2,
                 'type_id' => 1,
                 'amount' => 100,
                 'description' => 'Deposit',
@@ -51,7 +51,7 @@ class TransactionSeeder extends Seeder
             ],
             [
                 'account_id' => 6,
-                'user_id' => 4,
+                'user_id' => 3,
                 'type_id' =>2,
                 'amount' => 100,
                 'description' => 'Deposit',
