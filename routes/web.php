@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\WebAuthnLoginController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -81,6 +82,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('activity-log', [ActivityLogController::class, 'index'])->name('activity_log.index');
     Route::get('activity-log/{id}/show', [ActivityLogController::class, 'show'])->name('activity_log.show');
+
+    Route::get('my-profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::post('my-profile', [ProfileController::class, 'changePassword'])->name('profile.update');
 });
 
 require __DIR__.'/auth.php';
