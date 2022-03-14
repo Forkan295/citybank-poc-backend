@@ -27,14 +27,16 @@ class AccountSeeder extends Seeder
                 'user_id' => 1,
                 'type_id' => 2,
                 'date_opened' => '2020-03-08',
-                'balance' => 0,
+                'balance' => 1000,
+                'is_primary_account' => 1,
             ],
             [
                 'account_no' => '987654322',
                 'user_id' => 2,
                 'type_id' => 3,
                 'date_opened' => '2020-03-08',
-                'balance' => 0,
+                'balance' => 800,
+                'is_primary_account' => 1,
             ],
             [
                 'account_no' => '987654323',

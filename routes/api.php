@@ -59,7 +59,6 @@ Route::group(['name' => 'v1.'], function () {
 
         Route::post('recharge', [RechargeController::class, 'recharge']);
 
-
         //=========== biometric login and register ===========================
         Route::group(['prefix' => 'webauthn'], function () {
             Route::post('/register/options', [WebAuthnRegisterController::class, 'options'])->name('webauthn.register.options');
