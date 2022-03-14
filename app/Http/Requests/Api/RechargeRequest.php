@@ -50,11 +50,17 @@ class RechargeRequest extends FormRequest
     }
 
 
+    /**
+     * [checkUserBalance description]
+     * @param  [float] $currentBalance  [description]
+     * @param  [int] $rechargeBalance [description]
+     * @return [boolean]               [description]
+     */
     public function checkUserBalance($currentBalance, $rechargeBalance)
     {
         $restAccountBalance = (int) $currentBalance - $rechargeBalance;
 
-        if ($restAccountBalance <= 20 || $currentBalance <= 20 || $rechargeBalance > $currentBalance) {
+        if ($restAccountBalance <= 0 || $currentBalance <= 0 || $rechargeBalance > $currentBalance) {
             return true;
         }
 
