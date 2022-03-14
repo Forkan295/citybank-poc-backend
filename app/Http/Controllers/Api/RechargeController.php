@@ -17,10 +17,10 @@ use App\Models\User;
 
 class RechargeController extends Controller
 {
-	public $userId;
-	public $userAccount;
-	public $currentBalance;
-	public $transactionType;
+	private $userId;
+	private $userAccount;
+	private $currentBalance;
+	private $transactionType;
 
 	public function __construct()
 	{
@@ -30,6 +30,11 @@ class RechargeController extends Controller
 		$this->transactionType = $this->getTransactionTypeId('recharge');
 	}
 
+	/**
+	 * [recharge description]
+	 * @param  RechargeRequest $request [description]
+	 * @return [type]                   [description]
+	 */
     public function recharge(RechargeRequest $request)
     {
     	if (! $this->userAccount) {
@@ -63,7 +68,7 @@ class RechargeController extends Controller
 		    	'status' => true,
     		];
 
-    		$transaction->recharges()->create($recharge);
+    		$transaction->recharge()->create($recharge);
 
     		// Account balance update after recharge!
     		$balance = $this->currentBalance - $request->recharge_amount;
@@ -102,11 +107,19 @@ class RechargeController extends Controller
 		}
     }
 
+    /**
+     * [getUserId description]
+     * @return [type] [int]
+     */
     protected function getUserId()
     {
     	return auth('api')->user()->id;
     }
     
+    /**
+     * [getUserAccount description]
+     * @return [type] [description]
+     */
     protected function getUserAccount()
     {
     	$userAccount = Account::where('user_id', $this->userId)
@@ -116,11 +129,20 @@ class RechargeController extends Controller
     	return $userAccount;
     }
 
+    /**
+     * [getUserCurrentBalance description]
+     * @return [type] [description]
+     */
     private function getUserCurrentBalance()
     {
     	return $this->userAccount ? $this->userAccount->balance : 0;
     }
 
+    /**
+     * [getTransactionTypeId description]
+     * @param  [string] $typeName [description]
+     * @return [int]           [description]
+     */
     protected function getTransactionTypeId($typeName)
     {
     	$typeId = TransactionType::where('name', $typeName)
