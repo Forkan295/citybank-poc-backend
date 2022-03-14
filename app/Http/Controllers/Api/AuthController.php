@@ -41,7 +41,7 @@ class AuthController extends Controller
             return app(ApiResponse::class)->success([ 'access_token' => $accessToken, 'user' => $user]);
         } catch (\Exception $e) {
             Log::error($e);
-            return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION);
+            return app(ApiResponse::class)->exception($e->getMessage());
         }
     }
 

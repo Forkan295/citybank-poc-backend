@@ -22,7 +22,7 @@ class BeneficiaryController extends Controller
     public function index(): JsonResponse
     {
         $beneficiaries = Beneficiary::whereStatus(1)->get();
-        return ApiResponse::success(BeneficiaryResource::collection($beneficiaries), 'Success');
+        return app(ApiResponse::class)->success(BeneficiaryResource::collection($beneficiaries), 'Success');
     }
 
     /**
@@ -37,9 +37,9 @@ class BeneficiaryController extends Controller
             $user = auth('api')->user();
             $request->merge(['user_id' => $user->id]);
             $beneficiary = Beneficiary::create($request->all());
-            return ApiResponse::success(new BeneficiaryResource($beneficiary), 'Beneficiary created successfully');
+            return app(ApiResponse::class)->success(new BeneficiaryResource($beneficiary), 'Beneficiary created successfully');
         } catch (\Exception $exception) {
-            return ApiResponse::error($exception->getMessage());
+            return app(ApiResponse::class)->error($exception->getMessage());
         }
 
 
@@ -67,9 +67,9 @@ class BeneficiaryController extends Controller
     {
         try {
             $beneficiary->update($request->all());
-            return ApiResponse::success(new BeneficiaryResource($beneficiary), 'Beneficiary updated successfully');
+            return app(ApiResponse::class)->success(new BeneficiaryResource($beneficiary), 'Beneficiary updated successfully');
         } catch (\Throwable $exception) {
-            return response()->json(['response' => ApiResponse::error($exception->getMessage())]);
+            return response()->json(['response' => app(ApiResponse::class)->error($exception->getMessage())]);
         }
     }
 
@@ -84,10 +84,10 @@ class BeneficiaryController extends Controller
         try {
             $beneficiary->delete();
             DB::commit();
-            return ApiResponse::success([], 'Beneficiary Deleted successfully');
+            return app(ApiResponse::class)->success([], 'Beneficiary Deleted successfully');
         } catch (\Exception $exception) {
             DB::rollback();
-            return ApiResponse::error($exception->getMessage());
+            return app(ApiResponse::class)->error($exception->getMessage());
         }
     }
 }

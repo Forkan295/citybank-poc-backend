@@ -13,7 +13,7 @@ class AccountSeeder extends Seeder
      */
     public function run()
     {
-        
+
         $accounts = [
             [
                 'account_no' => '123456789',
@@ -45,14 +45,14 @@ class AccountSeeder extends Seeder
             ],
             [
                 'account_no' => '987654324',
-                'user_id' => 4,
+                'user_id' => 3,
                 'type_id' => 5,
                 'date_opened' => '2020-03-08',
                 'balance' => 0,
             ],
             [
                 'account_no' => '987654325',
-                'user_id' => 4,
+                'user_id' => 2,
                 'type_id' => 6,
                 'date_opened' => '2020-03-08',
                 'balance' => 0,
