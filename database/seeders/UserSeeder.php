@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
@@ -13,15 +15,26 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        
-        $users = 10;
 
-       for($i = 0; $i < $users; $i++) {
-            \App\Models\User::factory(1)->create([
-                'name' => 'User ' . $i,
-                'email' => 'user' . $i . '@admin.com',
+        User::insert([
+            [
+                'name' => 'Admin',
+                'uuid' => Str::uuid(),
+                'email' => 'admin@mail.com',
                 'password' => bcrypt('password'),
-            ]);
-       }
+            ],
+            [
+                'name' => 'User',
+                'uuid' => Str::uuid(),
+                'email' => 'user@mail.com',
+                'password' => bcrypt('123456'),
+            ],
+            [
+                'name' => 'Client',
+                'uuid' => Str::uuid(),
+                'email' => 'client@mail.com',
+                'password' => bcrypt('123456'),
+            ]
+        ]);
     }
 }

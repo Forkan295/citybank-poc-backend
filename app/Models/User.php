@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
 use DarkGhostHunter\Larapass\Contracts\WebAuthnAuthenticatable;
 use DarkGhostHunter\Larapass\WebAuthnAuthentication;
@@ -48,6 +49,17 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->uuid = Str::uuid()->toString();;
+//            if (empty($model->{$model->getKeyName()})) {
+//                $model->{$model->getKeyName()} = Str::uuid()->toString();
+//            }
+        });
+    }
+
     /**
      * @return HasMany
      */
@@ -55,7 +67,7 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
     {
         return $this->hasMany(Account::class, 'user_id');
     }
-    
+
     public function beneficiaries()
     {
         return $this->hasMany(Beneficiary::class, 'user_id');
