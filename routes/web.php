@@ -3,6 +3,8 @@
 use App\Http\Controllers\Auth\WebAuthnLoginController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\BankListController;
+use App\Http\Controllers\MobileOperatorListController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -85,6 +87,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('my-profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::post('my-profile', [ProfileController::class, 'changePassword'])->name('profile.update');
+
+    Route::get('bank-list', [BankListController::class, 'index'])->name('bank_list.index');
+    Route::get('mobile-operator-list', [MobileOperatorListController::class, 'index'])->name('mobile_operator_list.index');
 });
 
 require __DIR__.'/auth.php';
