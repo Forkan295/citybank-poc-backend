@@ -37,16 +37,6 @@ class RechargeController extends Controller
 	 */
     public function recharge(RechargeRequest $request)
     {
-    	if (! $this->userAccount) {
-    		return app(ApiResponse::class)->error(MessageEnum::NO_ACCOUNT);
-    	}
-
-    	$checkBalance = $request->checkUserBalance($this->currentBalance, $request->recharge_amount);
-
-    	if ($checkBalance) {
-    		return app(ApiResponse::class)->error(MessageEnum::NO_BALANCE);
-    	}
-    	
     	DB::beginTransaction();
 
     	try {
@@ -98,7 +88,7 @@ class RechargeController extends Controller
     		DB::commit();
 
     		return app(ApiResponse::class)->success([
-    			'message' => MessageEnum::SUCCESS_RECHARGE
+    			'message' => 'You have successfully recharged.'
     		]);
     	} catch (\Exception $e) {
 		    DB::rollback();
