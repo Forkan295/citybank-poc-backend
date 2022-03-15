@@ -13,6 +13,7 @@
         "laravel/passport": "^10.3",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "seshac/otp-generator": "^0.0.7",
         "spatie/laravel-activitylog": "^3.17",
         "tymon/jwt-auth": "^1.0"
     },
