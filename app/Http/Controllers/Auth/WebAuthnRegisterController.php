@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\MessageEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Response\ApiResponse;
+use DarkGhostHunter\Larapass\Contracts\WebAuthnAuthenticatable;
+use DarkGhostHunter\Larapass\Events\AttestationSuccessful;
+use DarkGhostHunter\Larapass\Facades\WebAuthn;
 use DarkGhostHunter\Larapass\Http\RegistersWebAuthn;
+use Illuminate\Http\Request;
+
 
 class WebAuthnRegisterController extends Controller
 {
@@ -29,4 +36,20 @@ class WebAuthnRegisterController extends Controller
     {
         $this->middleware('auth');
     }
+
+
+    public function register(Request $request, WebAuthnAuthenticatable $user)
+    {
+        $input           = $request->validate($this->attestationRules());
+        $validCredential = WebAuthn::validateAttestation($input, $user);
+
+        if ($validCredential) {
+            $user->addCredential($validCredential);
+            event(new AttestationSuccessful($user, $validCredential));
+            $this->credentialRegistered($user, $validCredential) ?? response()->noContent();
+            return app(ApiResponse::class)->success(MessageEnum::REGISTERED);
+        }
+        return app(ApiResponse::class)->error(MessageEnum::INVALID_CREDENTIAL);
+    }
+
 }

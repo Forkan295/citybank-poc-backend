@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Seshac\Otp\Otp;
 
 
 class AuthController extends Controller
@@ -22,8 +23,7 @@ class AuthController extends Controller
     public function login(Request $request): JsonResponse
     {
         $authService = new AuthService();
-
-        $validator = Validator::make($request->all(), $authService->basicRules());
+        $validator   = Validator::make($request->all(), $authService->basicRules());
 
         if ($validator->fails()) {
             return app(ApiResponse::class)->validationError($validator->errors());
@@ -36,12 +36,10 @@ class AuthController extends Controller
             }
             $accessToken = auth()->user()->createToken('users')->accessToken;
             $user        = $authService->getUserData($request->user());
-
-
-            return app(ApiResponse::class)->success([ 'access_token' => $accessToken, 'user' => $user]);
+            return app(ApiResponse::class)->success(['access_token' => $accessToken, 'user' => $user]);
         } catch (\Exception $e) {
             Log::error($e);
-            return app(ApiResponse::class)->exception($e->getMessage());
+            return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION);
         }
     }
 
