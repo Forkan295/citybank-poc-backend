@@ -28,6 +28,9 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'address',
+        'role',
     ];
 
     /**
@@ -38,6 +41,14 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    const ADMIN = 1;
+    const CLIENT = 2;
+
+    public static $role = [
+        self::ADMIN => 'Admin',
+        self::CLIENT => 'Client',
     ];
 
     /**
