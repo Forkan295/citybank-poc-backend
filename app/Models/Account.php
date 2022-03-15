@@ -18,9 +18,12 @@ class Account extends Model
      */
     protected $fillable = [
         'user_id',
-        'account_type_id',
-        'name',
+        'account_no',
+        'type_id',
+        'date_opened',
         'balance',
+        'is_primary_account',
+        'status',
     ];
 
     protected $casts = [

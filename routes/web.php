@@ -5,6 +5,7 @@ use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BankListController;
 use App\Http\Controllers\MobileOperatorListController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -90,6 +91,12 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('bank-list', [BankListController::class, 'index'])->name('bank_list.index');
     Route::get('mobile-operator-list', [MobileOperatorListController::class, 'index'])->name('mobile_operator_list.index');
+
+    Route::get('users', [UserController::class, 'index'])->name('user.index');
+    Route::get('users/create', [UserController::class, 'create'])->name('user.create');
+    Route::post('users', [UserController::class, 'store'])->name('user.store');
+    Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('users/{user}', [UserController::class, 'update'])->name('user.update');
 });
 
 require __DIR__.'/auth.php';
