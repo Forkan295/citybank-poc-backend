@@ -1,15 +1,14 @@
 <?php
 
-use App\Http\Controllers\Api\AccountController;
+use App\Http\Controllers\Api\OauthController as AthorizeController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\BeneficiaryController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\RechargeController;
+use App\Http\Controllers\Api\BeneficiaryController;
 use App\Http\Controllers\Auth\WebAuthnLoginController;
 use App\Http\Controllers\Auth\WebAuthnRegisterController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +35,6 @@ use Illuminate\Support\Facades\Route;
 //});
 
 
-
 Route::group(['name' => 'v1.'], function () {
     Route::post('/login', [AuthController::class, 'login']);
 
@@ -44,11 +42,12 @@ Route::group(['name' => 'v1.'], function () {
         Route::post('/login/options', [WebAuthnLoginController::class, 'options'])->name('webauthn.login.options');
         Route::post('/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login');
     });
-
+    Route::get('/authorize', [AthorizeController::class, 'getAuthorization'])->name('v1.authorize');
+    Route::post('/token', [AthorizeController::class, 'token'])->name('v1.token');
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::group(['prefix' => 'user'], function () {
-            Route::get('/', [AuthController::class, 'getProfile']);
+            Route::get('/', [AuthController::class, 'getProfile'])->name('v1.user.profile');
             Route::get('/accounts', [AccountController::class, 'getAccounts']);
         });
 

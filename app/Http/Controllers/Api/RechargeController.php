@@ -113,7 +113,7 @@ class RechargeController extends Controller
      */
     protected function getUserId()
     {
-    	return auth('api')->user()->id;
+    	// return auth('api')->user()->id;
     }
     
     /**
