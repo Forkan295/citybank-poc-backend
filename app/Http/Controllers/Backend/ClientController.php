@@ -19,9 +19,4 @@ class ClientController extends Controller
     {
     	return view('client.create');
     }
-
-    public function store(Request $request)
-    {
-    	dd($request->all());
-    }
 }

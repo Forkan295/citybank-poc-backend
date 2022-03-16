@@ -6,7 +6,7 @@ use Spatie\Activitylog\Models\Activity;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ActivitylogController extends Controller
+class ActivityLogController extends Controller
 {
     public function index()
     {
@@ -16,7 +16,7 @@ class ActivitylogController extends Controller
     }
 
     public function show($id) {
-    	$activityLog = Activity::where('id', $id)->first();
+    	$activityLog = Activity::findOrFail($id);
 
     	return view('activity-log.show', compact('activityLog'));
     }
