@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\Auth\WebAuthnLoginController;
-use App\Http\Controllers\ActivityLogController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\BankListController;
-use App\Http\Controllers\MobileOperatorListController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Backend\ActivityLogController;
+use App\Http\Controllers\Backend\ProfileController;
+use App\Http\Controllers\Backend\BankListController;
+use App\Http\Controllers\Backend\MobileOperatorListController;
+use App\Http\Controllers\Backend\ClientController;
+use App\Http\Controllers\Backend\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -83,11 +84,15 @@ Route::group(['middleware' => ['auth']], function () {
         ]);
     })->name('dashboard.index');
 
+    Route::get('clients', [ClientController::class, 'index'])->name('client.index');
+    Route::get('clients/create', [ClientController::class, 'create'])->name('client.create');
+    Route::post('clients', [ClientController::class, 'store'])->name('client.store');
+
     Route::get('activity-log', [ActivityLogController::class, 'index'])->name('activity_log.index');
     Route::get('activity-log/{id}/show', [ActivityLogController::class, 'show'])->name('activity_log.show');
 
     Route::get('my-profile', [ProfileController::class, 'index'])->name('profile.index');
-    Route::post('my-profile', [ProfileController::class, 'changePassword'])->name('profile.update');
+    Route::put('my-profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
 
     Route::get('bank-list', [BankListController::class, 'index'])->name('bank_list.index');
     Route::get('mobile-operator-list', [MobileOperatorListController::class, 'index'])->name('mobile_operator_list.index');

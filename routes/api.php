@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\RechargeController;
 use App\Http\Controllers\Api\BeneficiaryController;
+use App\Http\Controllers\Api\MobileOperatorController;
 use App\Http\Controllers\Auth\WebAuthnLoginController;
 use App\Http\Controllers\Auth\WebAuthnRegisterController;
 
@@ -45,6 +46,7 @@ Route::group(['name' => 'v1.'], function () {
         });
 
         Route::post('recharge', [RechargeController::class, 'recharge']);
+        Route::get('mobile-operator', [MobileOperatorController::class, 'getOperator']);
 
         //=========== biometric register ===========================
         Route::group(['prefix' => 'webauthn'], function () {

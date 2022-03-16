@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Response\ApiResponse;
 use Illuminate\Support\Facades\DB;
 use App\Models\TransactionType;
+use App\Models\MobileOperator;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
@@ -37,6 +38,10 @@ class RechargeController extends Controller
 	 */
     public function recharge(RechargeRequest $request)
     {
+        $operatorId = MobileOperator::where('name', $request->operator_name)
+                                ->pluck('id')
+                                ->first();
+
     	DB::beginTransaction();
 
     	try {
@@ -52,7 +57,7 @@ class RechargeController extends Controller
     		$transaction = Transaction::create($data);
 
     		$recharge = [
-    			'operator_name' => $request->operator_name,
+    			'operator_id' => $operatorId,
 		    	'phone_number' => $request->phone_number,
 		    	'recharge_amount' => $request->recharge_amount,
 		    	'status' => true,
@@ -103,7 +108,7 @@ class RechargeController extends Controller
      */
     protected function getUserId()
     {
-    	// return auth('api')->user()->id;
+    	return data_get(auth('api')->user(), 'id');
     }
     
     /**
