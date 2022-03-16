@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Api\OauthController as AthorizeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
@@ -21,35 +22,20 @@ use App\Http\Controllers\Auth\WebAuthnRegisterController;
 |
 */
 
-//Route::post('/login', [UserController::class, 'login']);
-//Route::post('/registration', [UserController::class, 'registration']);
-//Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login');
-//Route::post('webauthn/register', [WebAuthnRegisterController::class, 'register'])->name('webauthn.register');
-
-//Route::group(['name' => 'v1.', 'middleware' => 'auth:api'], function () {
-//    Route::post('/logout', [UserController::class, 'logout']);
-//    Route::group(['prefix' => 'user'], function () {
-//        Route::get('/', [UserController::class, 'getUser']);
-//        Route::get('/accounts', [UserController::class, 'getAccounts']);
-//    });
-//});
-
 
 Route::group(['name' => 'v1.'], function () {
     Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/authorize', [AthorizeController::class, 'getAuthorization'])->name('v1.authorize');
+    Route::post('/token', [AthorizeController::class, 'token'])->name('v1.token');
 
+    //biometric auth
     Route::group(['prefix' => 'webauthn'], function () {
         Route::post('/login/options', [WebAuthnLoginController::class, 'options'])->name('webauthn.login.options');
         Route::post('/login', [WebAuthnLoginController::class, 'login'])->name('webauthn.login');
     });
-    Route::get('/authorize', [AthorizeController::class, 'getAuthorization'])->name('v1.authorize');
-    Route::post('/token', [AthorizeController::class, 'token'])->name('v1.token');
+
 
     Route::group(['middleware' => 'auth:api'], function () {
-        Route::group(['prefix' => 'user'], function () {
-            Route::get('/', [AuthController::class, 'getProfile'])->name('v1.user.profile');
-            Route::get('/accounts', [AccountController::class, 'getAccounts']);
-        });
 
         Route::group(['prefix' => 'beneficiary'], function () {
             Route::get('/', [BeneficiaryController::class, 'index'])->name('beneficiary.index');
@@ -60,12 +46,23 @@ Route::group(['name' => 'v1.'], function () {
 
         Route::post('recharge', [RechargeController::class, 'recharge']);
 
-        //=========== biometric login and register ===========================
+        //=========== biometric register ===========================
         Route::group(['prefix' => 'webauthn'], function () {
             Route::post('/register/options', [WebAuthnRegisterController::class, 'options'])->name('webauthn.register.options');
             Route::post('/register', [WebAuthnRegisterController::class, 'register'])->name('webauthn.register');
         });
-        //logout user
-        Route::post('/logout', [UserController::class, 'logout']);
+
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/', [AuthController::class, 'getProfile'])->name('user.profile');
+            Route::get('/accounts', [AccountController::class, 'getAccounts']);
+            Route::post('/logout', [UserController::class, 'logout']);
+        });
+
+        Route::group(['prefix' => 'common'], function () {
+            Route::get('/banks', [ApiController::class, 'getBanks'])->name('common.banks');
+            Route::post('/send-otp', [ApiController::class, 'generateOtp'])->name('common.send-otp');
+            Route::post('/validate-otp', [ApiController::class, 'validateOtp'])->name('common.validate-otp');
+        });
+
     });
 });

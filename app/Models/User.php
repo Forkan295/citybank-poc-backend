@@ -65,9 +65,6 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
         parent::boot();
         static::creating(function ($model) {
             $model->uuid = Str::uuid()->toString();;
-//            if (empty($model->{$model->getKeyName()})) {
-//                $model->{$model->getKeyName()} = Str::uuid()->toString();
-//            }
         });
     }
 
@@ -79,7 +76,7 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
         return $this->hasMany(Account::class, 'user_id');
     }
 
-    public function beneficiaries()
+    public function beneficiaries() : HasMany
     {
         return $this->hasMany(Beneficiary::class, 'user_id');
     }
