@@ -15,6 +15,7 @@ use App\Models\Transaction;
 use App\Enums\MessageEnum;
 use App\Models\Account;
 use App\Models\User;
+use Seshac\Otp\Otp;
 
 class RechargeController extends Controller
 {
@@ -53,6 +54,12 @@ class RechargeController extends Controller
 	    		'description' => 'Recharge',
 	    		'status' => true,
 	    	];
+
+            $verify = Otp::validate($request->phone_number, $request->otp);
+
+            if (! $verify->status) {
+                return app(ApiResponse::class)->error($verify->message);
+            }
 
     		$transaction = Transaction::create($data);
 
