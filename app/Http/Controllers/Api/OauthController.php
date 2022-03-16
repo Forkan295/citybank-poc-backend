@@ -39,27 +39,78 @@ class OauthController extends AccessTokenController
             'code_challenge'        => $request->code_challenge,
             'code_challenge_method' => $request->code_challenge_method,
         ]);
-        return redirect('http://oauth2-poc.test:8080/oauth/authorize?'.$query);
+        return redirect('http://oauth2-poc.test:8080/oauth/authorize?' . $query);
     }
 
     /**
      * @param Request $request
-     * @return JsonResponse
+     * @return JsonResponse|mixed
      */
-    public function token(Request $request): JsonResponse
+    public function token(Request $request)
     {
-        $request         = Request::create(route('passport.token'), 'POST', array(
-                'grant_type'    => $request->grant_type,
-                'client_id'     => $request->client_id,
-                'redirect_uri'  => $request->redirect_uri,
-                'code_verifier' => $request->codeVerifier,
-                'code'          => $request->code,
-            )
-        );
-        $response        = Route::dispatch($request);
+        $request->merge($this->formatData($request));
+        switch ($request->grant_type) {
+            case 'password':
+                $data = $this->generatePasswordData($request->all());
+                break;
+            case 'authorization_code':
+                $data = $this->generateAuthorizationCodeData($request->all());
+                break;
+            default:
+                return response()->json(['error' => 'invalid Grant Type'], 400);
+        }
+        $data            = Request::create(route('passport.token'), 'POST', $data);
+        $response        = Route::dispatch($data);
         $responseMessage = $response->getContent();
         $tokenInfo       = json_decode($responseMessage);
-        return response()->json($tokenInfo);
+        return $tokenInfo;
+    }
+
+    /**
+     * @param $request
+     */
+    private function generatePasswordData($request): array
+    {
+        $data                  = [];
+        $data['grant_type']    = 'password';
+        $data['client_id']     = data_get($request, 'client_id');
+        $data['client_secret'] = data_get($request, 'client_secret');
+        $data['username']      = data_get($request, 'username');
+        $data['password']      = data_get($request, 'password');
+        $data['scope']         = '';
+        return $data;
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    private function generateAuthorizationCodeData($request): array
+    {
+        $data                  = [];
+        $data['grant_type']    = 'authorization_code';
+        $data['client_id']     = $request['client_id'];
+        $data['redirect_uri']  = $request['redirect_uri'];
+        $data['code_verifier'] = $request['code_verifier'];
+        $data['code']          = $request['code'];
+        return $data;
+    }
+
+    /**
+     * @param $request
+     * @return array
+     */
+    private function formatData($request): array
+    {
+        $client = explode(':', base64_decode($request->getUser()));
+        $user   = explode(':', base64_decode($request->getPassword()));
+
+        return [
+            'client_id'     => $client[0],
+            'client_secret' => $client[1],
+            'username'      => $user[0],
+            'password'      => $user[1],
+        ];
     }
 
 //    /**
