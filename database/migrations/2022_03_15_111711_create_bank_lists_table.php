@@ -22,6 +22,7 @@ class CreateBankListsTable extends Migration
             $table->string('founder')->nullable();
             $table->string('headquarter')->nullable();
             $table->string('website')->nullable();
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }

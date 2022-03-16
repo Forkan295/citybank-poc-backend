@@ -15,13 +15,13 @@ class BeneficiaryResource extends JsonResource
     public function toArray($request)
     {
         return [
-            "account_no"     => $this->account_no,
-            "routing_number" => $this->routing_number,
-            "name"           => $this->name,
-            "bank_name"      => $this->bank_name,
-            "branch_name"    => $this->branch_name,
-            "branch_city"    => $this->branch_city,
-            "currency"       => $this->currency,
+            "account_name" => data_get($this, 'account_name', ''),
+            "account_no"   => data_get($this, 'account_no', ''),
+            "bank_name"    => data_get($this, 'bank_name', ''),
+            "branch_name"  => data_get($this, 'branch_name', ''),
+            "branch_city"  => data_get($this, 'branch_city', ''),
+            "currency"     => data_get($this, 'currency', ''),
+            "routing_no"   => data_get($this, 'routing_number', ''),
         ];
     }
 }

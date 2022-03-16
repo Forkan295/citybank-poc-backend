@@ -10,7 +10,7 @@ return [
     | By default = 10 minutes
     |
     */
-    'validity' => env('OTP_VALIDITY_TIME', 10),
+    'validity' => env('OTP_VALIDITY_TIME', 3),
     /*
     |--------------------------------------------------------------------------
     |  Length of the generated OTP
