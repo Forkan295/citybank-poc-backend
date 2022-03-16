@@ -81,7 +81,7 @@ Route::group(['middleware' => ['auth']], function () {
         return view('dashboard',[
             'clients'=> $request->user()->clients
         ]);
-    })->name('dashboard');
+    })->name('dashboard.index');
 
     Route::get('activity-log', [ActivityLogController::class, 'index'])->name('activity_log.index');
     Route::get('activity-log/{id}/show', [ActivityLogController::class, 'show'])->name('activity_log.show');

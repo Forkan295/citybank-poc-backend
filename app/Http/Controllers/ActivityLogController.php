@@ -10,7 +10,7 @@ class ActivityLogController extends Controller
 {
     public function index()
     {
-    	$activityLogs = Activity::all();
+    	$activityLogs = Activity::paginate();
 
     	return view('activity-log.index', compact('activityLogs'));
     }

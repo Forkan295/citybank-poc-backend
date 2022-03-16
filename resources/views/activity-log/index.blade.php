@@ -1,70 +1,56 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
-
+@extends('layouts.app')
+@section('content')
+<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
     <div class="py-4">
-        <div class="max-w-7 mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="">
-                        <div class="w-1/2">
-                            <div class="p-6">
-                                <div class="bg-white shadow-sm sm:rounded-lg">
-                                    <table
-                                            class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
-                                            <thead class="bg-gray-100 dark:bg-gray-900 py-12">
-                                            <tr>
-                                                <th scope="col"
-                                                    class="py-4 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                                    #
-                                                </th>
-                                                <th scope="col"
-                                                    class="py-4 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                                    Log Name
-                                                </th>
-                                                <th scope="col"
-                                                    class="py-4 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                                    User Id
-                                                </th>
-                                                <th scope="col"
-                                                    class="py-4 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                                    Status
-                                                </th>
-                                                <th scope="col"
-                                                    class="py-4 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                                    Created At
-                                                </th>
-                                                <th scope="col"
-                                                    class="py-4 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                                    Action
-                                                </th>
-                                            </tr>
-                                            </thead>
-                                            <tbody
-                                                class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                            @foreach ($activityLogs as $item)
-                                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-900">
-                                                    <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $loop->index + 1 }}</td>
-                                                    <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $item->log_name }}</td>
-                                                    <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $item->causer_id }}</td>
-                                                    <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">success</td>
-                                                    <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $item->created_at }}</td>
-                                                    <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                        <a href="{{ route('activity_log.show', $item->id) }}">Details</a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                            </tbody>
-                                        </table>
-                                </div>
-                            </div>
+        <div class="px-4 sm:px-6 lg:px-8">
+            <div class="sm:flex sm:items-center">
+                <div class="sm:flex-auto">
+                    <h1 class="text-xl font-semibold text-gray-900">Activiry Log</h1>
+                </div>
+            </div>
+
+            <div class="mt-8 flex flex-col">
+                <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                        <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                            <table class="min-w-full">
+                                <thead class="bg-white">
+                                  <tr>
+                                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">#</th>
+                                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Log Name</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">User Id</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Created At</th>
+                                    <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-gray-900">Action</th>
+                                    <th scope="col" class="relative py-3.5">
+                                      <span class="sr-only">Details</span>
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody class="bg-white">
+                                    @foreach ($activityLogs as $item)
+                                    <tr class="border-t border-gray-300">
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ $loop->index + 1 }}</td>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ $item->log_name }}</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $item->causer_id }}</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ 'success' }}</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $item->created_at }}</td>
+                                        <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-center text-sm font-medium sm:pr-6">
+                                          <a href="{{ route('activity_log.show', $item->id) }}" class="text-indigo-600 hover:text-indigo-900">Details</a>
+                                        </td>
+                                    </tr>
+                                  @endforeach
+                                </tbody>
+                            </table>
+
+                            @if ($activityLogs->links())
+                                {{ $activityLogs->links() }}
+                            @endif 
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection
