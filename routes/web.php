@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\Auth\WebAuthnLoginController;
-use App\Http\Controllers\ActivityLogController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\BankListController;
-use App\Http\Controllers\MobileOperatorListController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Backend\ActivityLogController;
+use App\Http\Controllers\Backend\ProfileController;
+use App\Http\Controllers\Backend\BankListController;
+use App\Http\Controllers\Backend\MobileOperatorListController;
+use App\Http\Controllers\Backend\ClientController;
+use App\Http\Controllers\Backend\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -82,6 +83,10 @@ Route::group(['middleware' => ['auth']], function () {
             'clients'=> $request->user()->clients
         ]);
     })->name('dashboard.index');
+
+    Route::get('clients', [ClientController::class, 'index'])->name('client.index');
+    Route::get('clients/create', [ClientController::class, 'create'])->name('client.create');
+    Route::post('clients', [ClientController::class, 'store'])->name('client.store');
 
     Route::get('activity-log', [ActivityLogController::class, 'index'])->name('activity_log.index');
     Route::get('activity-log/{id}/show', [ActivityLogController::class, 'show'])->name('activity_log.show');

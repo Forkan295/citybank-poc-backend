@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\MobileOperator;
+use Illuminate\Http\Request;
 
 class MobileOperatorListController extends Controller
 {
