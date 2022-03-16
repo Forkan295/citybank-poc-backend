@@ -14,12 +14,12 @@ class AccountTypeSeeder extends Seeder
     public function run()
     {
         $accountTypes = [
-            'Checking',
             'Savings',
+            'Current',
+            'Salary',
             'Credit Card',
-            'Investment',
-            'Mortgage',
-            'Other',
+            'Recurring Deposit',
+            'Fixed Deposit',
         ];
 
         foreach ($accountTypes as $accountType) {

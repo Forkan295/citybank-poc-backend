@@ -89,38 +89,5 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
         return $this->hasMany(Transaction::class, 'user_id');
     }
 
-    public function getAccount($id)
-    {
-        return $this->accounts()->find($id);
-    }
 
-    public function getAccountByType($type)
-    {
-        return $this->accounts()->where('type', $type)->first();
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getTransactions(): Collection
-    {
-        return $this->transactions()->get();
-    }
-
-    /**
-     * @param $accountId
-     * @return Collection
-     */
-    public function getTransactionsByAccount($accountId): Collection
-    {
-        return $this->transactions()->where('account_id', $accountId)->get();
-    }
-
-    /**
-     * @return int|mixed
-     */
-    public function getTotalTransactionAmountAttribute()
-    {
-        return $this->transactions()->sum('amount');
-    }
 }

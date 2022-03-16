@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Str;
 
 class Transaction extends Model
 {
@@ -17,19 +18,22 @@ class Transaction extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'invoice_id',
         'user_id',
         'account_id',
         'type_id',
         'beneficiary_id',
-        'amount',
-        'description',
+        'previous_amount',
+        'transfer_amount',
+        'remarks',
+        'transaction_date',
         'status',
     ];
 
-    const STATUS_PENDING = 0;
-    const STATUS_COMPLETED = 1;
-    const STATUS_FAILED = 2;
-    
+    protected $dates = [
+        'transaction_date'
+    ];
+
 
     /**
      * @return BelongsTo
@@ -47,6 +51,16 @@ class Transaction extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function beneficiary(): BelongsTo
+    {
+        return $this->belongsTo(Beneficiary::class, 'beneficiary_id');
+    }
+
+    public function transactionType(): BelongsTo
+    {
+        return $this->belongsTo(TransactionType::class, 'type_id');
+    }
+
     /**
      * @return HasOne
      */
@@ -54,4 +68,14 @@ class Transaction extends Model
     {
         return $this->hasOne(Recharge::class, 'transaction_id');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->invoice_id = Str::random('12');
+        });
+    }
+
+
 }

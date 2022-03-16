@@ -20,14 +20,14 @@ class Account extends Model
         'user_id',
         'account_no',
         'type_id',
-        'date_opened',
+        'opening_date',
         'balance',
-        'is_primary_account',
+        'is_primary',
         'status',
     ];
 
     protected $casts = [
-        'is_primary_account' => 'boolean'
+        'is_primary' => 'boolean'
     ];
 
     /**
@@ -55,34 +55,10 @@ class Account extends Model
     }
 
     /**
-     * @return mixed
+     * @param $query
      */
-    public function getAccountTypeNameAttribute()
-    {
-        return $this->accountType->name;
-    }
-
-    /**
-     * @param $balance
-     * @return $this
-     */
-    public function setBalance($balance): Account
-    {
-        $this->balance = $balance;
-        $this->save();
-        return $this;
-    }
-
-    /**
-     * @return int|mixed
-     */
-    public function getTotalTransactionAmountAttribute()
-    {
-        return $this->transactions()->sum('amount');
-    }
-
     public function scopeIsPrimaryAccount($query)
     {
-        $query->where('is_primary_account', 1);
+        $query->where('is_primary', 1);
     }
 }

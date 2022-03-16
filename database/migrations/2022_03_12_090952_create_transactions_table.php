@@ -15,13 +15,16 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->string('invoice_id')->unique();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('account_id')->constrained('accounts')->onDelete('cascade');
             $table->foreignId('type_id')->constrained('transaction_types')->onDelete('cascade');
             $table->foreignId('beneficiary_id')->nullable()->constrained('beneficiaries')->onDelete('cascade');
-            $table->decimal('amount', 8, 2)->default(0);
-            $table->string('description')->nullable();
-            $table->integer('status')->default(0);
+            $table->decimal('previous_amount', 8, 2)->default(0);
+            $table->decimal('transfer_amount', 8, 2)->default(0);
+            $table->text('remarks')->nullable();
+            $table->dateTime('transaction_date');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }
