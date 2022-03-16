@@ -43,6 +43,16 @@
                                                 <x-input id="redirect" class="block mt-1 w-full" type="text"
                                                          name="redirect" required autofocus/>
                                             </div>
+                                            <div class="py-4">
+                                                <x-label for="redirect" :value="__('Password Grand')"/>
+                                                <x-input id="redirect" class="block mt-1" type="checkbox"
+                                                         name="password_client" value="1" required autofocus/>
+                                            </div>
+{{--                                            <div class="py-4">--}}
+{{--                                                <x-label for="redirect" :value="__('PKCE')"/>--}}
+{{--                                                <x-input id="redirect" class="block mt-1" type="checkbox"--}}
+{{--                                                         name="password_client" required autofocus/>--}}
+{{--                                            </div>--}}
 
 
                                             <div class="flex  justify-start">
