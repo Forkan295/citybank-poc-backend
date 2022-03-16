@@ -87,7 +87,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('activity-log/{id}/show', [ActivityLogController::class, 'show'])->name('activity_log.show');
 
     Route::get('my-profile', [ProfileController::class, 'index'])->name('profile.index');
-    Route::post('my-profile', [ProfileController::class, 'changePassword'])->name('profile.update');
+    Route::put('my-profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
 
     Route::get('bank-list', [BankListController::class, 'index'])->name('bank_list.index');
     Route::get('mobile-operator-list', [MobileOperatorListController::class, 'index'])->name('mobile_operator_list.index');

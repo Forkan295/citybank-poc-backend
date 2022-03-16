@@ -20,24 +20,35 @@ class ProfileController extends Controller
     	return view('profile.index', compact('user'));
     }
 
-    public function changePassword(Request $request)
+    public function update(Request $request, User $user)
     {
-    	$request->validate([
-	        'password' => 'required|min:4|confirmed',
-	        'password_confirmation' => 'required|min:4',
-	    ]);
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,'.$user->id,
+            'phone' => 'required',
+            'password' => 'required|min:4|confirmed',
+            'password_confirmation' => 'required|min:4',
+            // 'photo' => 'nullable|image|mimes:jpeg,jpg,png|max:1024',
+        ]);
 
-    	$user = Auth::user();
+        try {
+            $data = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'password' => Hash::make($request->password),
+            ];
 
-	    $hasPassword = $user->password;
+            $user->update($data);
 
-		if (! Hash::check($request->password, $hasPassword)) {
-			$user::where('id', $user->id)
-				->update(['password' => Hash::make($request->password)]);
+            // if ($request->hasFile('photo')) {
+            //     $request->photo->storeAs('photos', $request->photo);
+            // }
 
-			return redirect()->back()->with('success', 'Your password has been successfully changed!');
-		} else {
-			return redirect()->back()->with('error', 'New password can not be the old password!');
-		}
+            return redirect()->route('profile.index')->with('success', 'Account succssfully updated!');
+        } catch (\Exception $e) {
+            return redirect()->route('profile.index')->with('error', 'Something went wrong.');
+        }
     }
 }
