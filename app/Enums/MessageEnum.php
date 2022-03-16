@@ -10,5 +10,6 @@ interface MessageEnum
     const REGISTERED         = 'Device successfully registered';
     const SERVER_EXCEPTION   = 'Something went wrong, Please try again';
 
-    const WEBAUTHN_ = 'Invalid Credentials';
+    const SUCCESS = 'Data store successfully';
+    const UPDATE  = 'Data updated successfully';
 }

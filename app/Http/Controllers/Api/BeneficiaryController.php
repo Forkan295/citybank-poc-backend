@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\ResponseStatusCode;
+use App\Enums\MessageEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BeneficiaryRequest;
 use App\Http\Resources\BeneficiaryResource;
 use App\Http\Response\ApiResponse;
 use App\Models\Beneficiary;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+
 
 class BeneficiaryController extends Controller
 {
@@ -21,8 +19,13 @@ class BeneficiaryController extends Controller
      */
     public function index(): JsonResponse
     {
-        $beneficiaries = Beneficiary::whereStatus(1)->get();
-        return app(ApiResponse::class)->success(BeneficiaryResource::collection($beneficiaries), 'Success');
+        try {
+            $user          = auth('api')->user();
+            $beneficiaries = data_get($user, 'beneficiaries', '');
+            return app(ApiResponse::class)->success(['items' => BeneficiaryResource::collection($beneficiaries)]);
+        } catch (\Exception $e) {
+            return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION);
+        }
     }
 
     /**
@@ -35,14 +38,11 @@ class BeneficiaryController extends Controller
     {
         try {
             $user = auth('api')->user();
-            $request->merge(['user_id' => $user->id]);
-            $beneficiary = Beneficiary::create($request->all());
-            return app(ApiResponse::class)->success(new BeneficiaryResource($beneficiary), 'Beneficiary created successfully');
+            $user->beneficiaries()->create($request->all());
+            return app(ApiResponse::class)->success('', MessageEnum::SUCCESS);
         } catch (\Exception $exception) {
             return app(ApiResponse::class)->error($exception->getMessage());
         }
-
-
     }
 
     /**
@@ -67,9 +67,9 @@ class BeneficiaryController extends Controller
     {
         try {
             $beneficiary->update($request->all());
-            return app(ApiResponse::class)->success(new BeneficiaryResource($beneficiary), 'Beneficiary updated successfully');
+            return app(ApiResponse::class)->success('', MessageEnum::UPDATE);
         } catch (\Throwable $exception) {
-            return response()->json(['response' => app(ApiResponse::class)->error($exception->getMessage())]);
+            return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION);
         }
     }
 
@@ -80,14 +80,11 @@ class BeneficiaryController extends Controller
      */
     public function destroy(Beneficiary $beneficiary): JsonResponse
     {
-        DB::beginTransaction();
         try {
             $beneficiary->delete();
-            DB::commit();
-            return app(ApiResponse::class)->success([], 'Beneficiary Deleted successfully');
+            return app(ApiResponse::class)->success([], 'Data Deleted successfully');
         } catch (\Exception $exception) {
-            DB::rollback();
-            return app(ApiResponse::class)->error($exception->getMessage());
+            return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION);
         }
     }
 }

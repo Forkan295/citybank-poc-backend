@@ -25,13 +25,13 @@ class BeneficiaryRequest extends FormRequest
     public function rules()
     {
         return [
-            'account_no'     => ['required',Rule::unique('beneficiaries')->ignore($this->beneficiary)],
-            'name'           => ['required','string'],
-            'routing_number' => ['required','string'],
-            'bank_name'      => ['required','string'],
-            'branch_name'    => ['required','string'],
-            'branch_city'    => ['required','string'],
-            'currency'       => ['required','string'],
+            'account_no'   => ['required', Rule::unique('beneficiaries')->ignore($this->beneficiary)],
+            'account_name' => ['required', 'string'],
+//            'routing_number' => ['required','string'],
+            'bank_name'    => ['required', 'string'],
+            'branch_name'  => ['required', 'string'],
+            'branch_city'  => ['required', 'string'],
+//            'currency'       => ['required','string'],
         ];
     }
 }

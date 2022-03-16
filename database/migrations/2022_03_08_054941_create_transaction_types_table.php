@@ -16,7 +16,7 @@ class CreateTransactionTypesTable extends Migration
         Schema::create('transaction_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean('status')->default(true);
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }

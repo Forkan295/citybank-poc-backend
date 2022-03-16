@@ -21,7 +21,7 @@ class CreateAccountsTable extends Migration
             $table->date('date_opened');
             $table->decimal('balance', 8, 2)->default(0);
             $table->boolean('is_primary_account')->default(false);
-            $table->boolean('status')->default(true);
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }
