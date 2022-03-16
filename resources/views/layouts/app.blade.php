@@ -15,15 +15,18 @@
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+    </head>
+    <body class="h-full">
+        <div class="h-full bg-gray-100">
+            <div class="fixed inset-0 flex z-40 md:hidden" role="dialog" aria-modal="true">
+                @include('layouts.sidebar')
+
+                <main class="flex-1">
+                    @yield('content')
+                </main>
+            </div>
         </div>
     </body>
 </html>
