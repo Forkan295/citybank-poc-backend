@@ -69,7 +69,6 @@ class UserController extends Controller
 
     		return redirect()->back()->with('success', 'Account succssfully created!');
     	} catch (\Exception $e) {
-            dd($e);
     		DB::rollback();
 
     		return redirect()->back()->with('error', 'Something went wrong.');
