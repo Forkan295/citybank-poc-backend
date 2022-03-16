@@ -15,12 +15,12 @@ class CreateAccountsTable extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
-            $table->char('account_no',32)->unique();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('type_id')->constrained('account_types')->onDelete('cascade');
-            $table->date('date_opened');
+            $table->char('account_no',32)->unique();
             $table->decimal('balance', 8, 2)->default(0);
-            $table->boolean('is_primary_account')->default(false);
+            $table->date('opening_date');
+            $table->boolean('is_primary')->default(false);
             $table->boolean('status')->default(1);
             $table->timestamps();
         });

@@ -36,7 +36,6 @@ Route::group(['name' => 'v1.'], function () {
 
 
     Route::group(['middleware' => 'auth:api'], function () {
-
         Route::group(['prefix' => 'beneficiary'], function () {
             Route::get('/', [BeneficiaryController::class, 'index'])->name('beneficiary.index');
             Route::post('/create', [BeneficiaryController::class, 'store'])->name('beneficiary.create');
@@ -48,13 +47,16 @@ Route::group(['name' => 'v1.'], function () {
 
         //=========== biometric register ===========================
         Route::group(['prefix' => 'webauthn'], function () {
-            Route::post('/register/options', [WebAuthnRegisterController::class, 'options'])->name('webauthn.register.options');
+            Route::post('/register/options',
+                [WebAuthnRegisterController::class, 'options'])->name('webauthn.register.options');
             Route::post('/register', [WebAuthnRegisterController::class, 'register'])->name('webauthn.register');
         });
 
         Route::group(['prefix' => 'user'], function () {
             Route::get('/', [AuthController::class, 'getProfile'])->name('user.profile');
             Route::get('/accounts', [AccountController::class, 'getAccounts']);
+            Route::post('/balance-transfer', [AccountController::class, 'balanceTransfer']);
+            Route::post('/transactions', [AccountController::class, 'getTransaction']);
             Route::post('/logout', [UserController::class, 'logout']);
         });
 
@@ -63,6 +65,5 @@ Route::group(['name' => 'v1.'], function () {
             Route::post('/send-otp', [ApiController::class, 'generateOtp'])->name('common.send-otp');
             Route::post('/validate-otp', [ApiController::class, 'validateOtp'])->name('common.validate-otp');
         });
-
     });
 });
