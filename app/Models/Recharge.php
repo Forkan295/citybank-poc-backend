@@ -12,7 +12,7 @@ class Recharge extends Model
 
     protected $fillable = [
     	'transaction_id',
-    	'operator_name',
+    	'operator_id',
     	'phone_number',
     	'recharge_amount',
     	'status',

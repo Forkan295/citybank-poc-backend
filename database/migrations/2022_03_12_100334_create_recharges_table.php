@@ -16,7 +16,7 @@ class CreateRechargesTable extends Migration
         Schema::create('recharges', function (Blueprint $table) {
             $table->id();
             $table->foreignId('transaction_id')->constrained('transactions')->onDelete('cascade');
-            $table->string('operator_name');
+            $table->bigInteger('operator_id');
             $table->string('phone_number');
             $table->decimal('recharge_amount', 8, 2);
             $table->boolean('status');

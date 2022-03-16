@@ -16,6 +16,7 @@ class CreateMobileOperatorsTable extends Migration
         Schema::create('mobile_operators', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('status');
             $table->timestamps();
         });
     }
