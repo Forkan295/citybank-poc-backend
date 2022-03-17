@@ -23,7 +23,7 @@ use App\Http\Controllers\Auth\WebAuthnRegisterController;
 */
 
 
-Route::group(['name' => 'v1.'], function () {
+Route::group(['name' => 'v1.', 'middleware' => 'apilogger'], function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/authorize', [AthorizeController::class, 'getAuthorization'])->name('v1.authorize');
     Route::post('/token', [AthorizeController::class, 'token'])->name('v1.token');
@@ -63,7 +63,8 @@ Route::group(['name' => 'v1.'], function () {
 
         Route::group(['prefix' => 'common'], function () {
             Route::get('/banks', [ApiController::class, 'getBanks'])->name('common.banks');
-            Route::get('/transaction-types', [ApiController::class, 'getTransferType'])->name('common.transaction-types');
+            Route::get('/transaction-types',
+                [ApiController::class, 'getTransferType'])->name('common.transaction-types');
             Route::post('/send-otp', [ApiController::class, 'generateOtp'])->name('common.send-otp');
 //            Route::post('/validate-otp', [ApiController::class, 'validateOtp'])->name('common.validate-otp');
         });
