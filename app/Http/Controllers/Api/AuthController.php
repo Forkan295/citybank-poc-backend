@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 
-
 class AuthController extends Controller
 {
     /**
@@ -39,7 +38,7 @@ class AuthController extends Controller
             return app(ApiResponse::class)->success(['access_token' => $accessToken, 'user' => $user]);
         } catch (\Exception $e) {
             Log::error($e);
-            return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION,$e->getMessage());
+            return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION, $e->getMessage());
         }
     }
 
@@ -61,8 +60,13 @@ class AuthController extends Controller
      */
     public function logout(): JsonResponse
     {
-        $accessToken = auth()->user()->token();
-        $accessToken->revoke();
-        return response()->json(['message' => 'Successfully logged out'], Response::HTTP_OK);
+        try {
+            $accessToken = auth()->user()->token();
+            $accessToken->revoke();
+            return app(ApiResponse::class)->success('', 'Successfully logged out');
+        } catch (\Exception $e) {
+            Log::error($e);
+            return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION);
+        }
     }
 }

@@ -64,20 +64,6 @@ Route::get('/', function () {
 //
 //});
 
-
-Route::post('webauthn/register/options', [WebAuthnRegisterController::class, 'options'])
-    ->name('webauthn.register.options');
-
-Route::post('webauthn/register', [WebAuthnRegisterController::class, 'register'])
-    ->name('webauthn.register');
-
-Route::post('webauthn/login/options', [WebAuthnLoginController::class, 'options'])
-    ->name('webauthn.login.options');
-Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])
-    ->name('webauthn.login');
-
-
-
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 

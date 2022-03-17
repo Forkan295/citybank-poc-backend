@@ -13,4 +13,11 @@ class MobileOperator extends Model
     	'name',
     	'status',
     ];
+
+    public function scopeActive($q)
+    {
+        $q->where('status', 1);
+    }
+
+
 }
