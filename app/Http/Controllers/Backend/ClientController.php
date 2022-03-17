@@ -12,7 +12,8 @@ class ClientController extends Controller
 {
     public function index()
     {
-    	$clients = OauthClient::all();
+        $user = auth()->user();
+        $clients = $user->clients;
 
     	return view('client.index', compact('clients'));
     }
