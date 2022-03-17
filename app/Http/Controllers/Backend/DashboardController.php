@@ -4,25 +4,24 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\OauthClient;
 use App\Models\User;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-    	$totalBankAdmin = $this->getUserByRole(1)->count();
-    	$totalBankClient = $this->getUserByRole(2)->count();
-    	$totalOauth2Client = OauthClient::get()->count();
+    	$totalOauth2Admin = $this->getUserByRole('oauth')->count();
+    	$totalApiAdmin = $this->getUserByRole('api')->count();
+    	$totalBankClient = $this->getUserByRole('client')->count();
+
+    	$totalUser = $totalApiAdmin + $totalOauth2Admin + $totalBankClient;
     	
-    	$totalBankUser = $totalBankAdmin + $totalBankClient + $totalOauth2Client;
-    	
-    	$users = $this->getUserByRole(2)
+    	$users = $this->getUserByRole('client')
     					->latest()
     					->take(10)
     					->get();
 
-    	return view('dashboard', compact('users', 'totalBankAdmin', 'totalBankClient', 'totalBankUser', 'totalOauth2Client'));
+    	return view('dashboard', compact('users', 'totalOauth2Admin', 'totalApiAdmin', 'totalBankClient', 'totalUser'));
     }
 
     private function getUserByRole($role)

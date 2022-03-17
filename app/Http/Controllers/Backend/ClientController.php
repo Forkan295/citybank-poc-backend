@@ -6,7 +6,6 @@ use Laravel\Passport\ClientRepository;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\BankList;
-use App\Models\OauthClient;
 
 class ClientController extends Controller
 {
