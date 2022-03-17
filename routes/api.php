@@ -37,16 +37,6 @@ Route::group(['name' => 'v1.', 'middleware' => 'apilogger'], function () {
 
 
     Route::group(['middleware' => 'auth:api'], function () {
-        Route::group(['prefix' => 'beneficiary'], function () {
-            Route::get('/', [BeneficiaryController::class, 'index'])->name('beneficiary.index');
-            Route::post('/create', [BeneficiaryController::class, 'store'])->name('beneficiary.create');
-            Route::put('/{beneficiary}', [BeneficiaryController::class, 'update'])->name('beneficiary.update');
-            Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])->name('beneficiary.destroy');
-        });
-
-        Route::post('recharge', [RechargeController::class, 'recharge']);
-        Route::get('mobile-operator', [MobileOperatorController::class, 'getOperator']);
-
         //=========== biometric register ===========================
         Route::group(['prefix' => 'webauthn'], function () {
             Route::post('/register/options',
@@ -54,15 +44,6 @@ Route::group(['name' => 'v1.', 'middleware' => 'apilogger'], function () {
             Route::post('/register', [WebAuthnRegisterController::class, 'register'])->name('webauthn.register');
         });
 
-        Route::group(['prefix' => 'user'], function () {
-            Route::get('/', [AuthController::class, 'getProfile'])->name('user.profile');
-            Route::get('/accounts', [AccountController::class, 'getAccounts']);
-            Route::post('/balance-transfer', [AccountController::class, 'balanceTransfer']);
-            Route::post('/transactions', [AccountController::class, 'getTransaction']);
-            Route::post('/logout', [UserController::class, 'logout']);
-        });
-
-
         Route::group(['prefix' => 'beneficiary'], function () {
             Route::get('/', [BeneficiaryController::class, 'index'])->name('beneficiary.index');
             Route::post('/create', [BeneficiaryController::class, 'store'])->name('beneficiary.create');
@@ -70,12 +51,19 @@ Route::group(['name' => 'v1.', 'middleware' => 'apilogger'], function () {
             Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])->name('beneficiary.destroy');
         });
 
-        Route::post('recharge', [RechargeController::class, 'recharge']);
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/', [AuthController::class, 'getProfile'])->name('user.profile');
+            Route::get('/accounts', [AccountController::class, 'getAccounts']);
+            Route::post('/balance-transfer', [AccountController::class, 'balanceTransfer']);
+            Route::post('/transactions', [AccountController::class, 'getTransaction']);
+            Route::post('recharge', [RechargeController::class, 'recharge']);
+            Route::post('/logout', [UserController::class, 'logout']);
+        });
 
         Route::group(['prefix' => 'common'], function () {
             Route::get('/banks', [ApiController::class, 'getBanks'])->name('common.banks');
-            Route::get('/transaction-types',
-                [ApiController::class, 'getTransferType'])->name('common.transaction-types');
+            Route::get('/transaction-types', [ApiController::class, 'getTransferType'])->name('common.transaction-types');
+            Route::get('/mobile-operators', [MobileOperatorController::class, 'getOperator'])->name('common.mobile-operators');
             Route::post('/send-otp', [ApiController::class, 'generateOtp'])->name('common.send-otp');
 //            Route::post('/validate-otp', [ApiController::class, 'validateOtp'])->name('common.validate-otp');
         });
