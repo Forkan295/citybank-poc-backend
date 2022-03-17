@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Response\ApiResponse;
 use Firebase\JWT\JWT;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Contracts\Foundation\Application;
@@ -39,7 +40,7 @@ class OauthController extends AccessTokenController
             'code_challenge'        => $request->code_challenge,
             'code_challenge_method' => $request->code_challenge_method,
         ]);
-        return redirect('http://oauth2-poc.test:8080/oauth/authorize?' . $query);
+        return redirect(url('oauth/authorize?' . $query));
     }
 
     /**
@@ -48,22 +49,24 @@ class OauthController extends AccessTokenController
      */
     public function token(Request $request)
     {
-        $request->merge($this->formatData($request));
+        $data=[];
         switch ($request->grant_type) {
             case 'password':
+                $request->merge($this->formatData($request));
                 $data = $this->generatePasswordData($request->all());
                 break;
             case 'authorization_code':
                 $data = $this->generateAuthorizationCodeData($request->all());
                 break;
-            default:
-                return response()->json(['error' => 'invalid Grant Type'], 400);
         }
         $data            = Request::create(route('passport.token'), 'POST', $data);
         $response        = Route::dispatch($data);
         $responseMessage = $response->getContent();
         $tokenInfo       = json_decode($responseMessage);
-        return $tokenInfo;
+        if (isset($tokenInfo->error)) {
+            return app(ApiResponse::class)->error($tokenInfo->message, $tokenInfo->error);
+        }
+        return app(ApiResponse::class)->success($tokenInfo, 'Token generated successfully');
     }
 
     /**

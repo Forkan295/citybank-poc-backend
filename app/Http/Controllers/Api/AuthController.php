@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use Seshac\Otp\Otp;
+
 
 
 class AuthController extends Controller
@@ -34,12 +34,12 @@ class AuthController extends Controller
             if (!$credential) {
                 return app(ApiResponse::class)->error(MessageEnum::INVALID_CREDENTIAL);
             }
-            $accessToken = auth()->user()->createToken('users')->accessToken;
+            $accessToken = auth()->user()->createToken('users');
             $user        = $authService->getUserData($request->user());
             return app(ApiResponse::class)->success(['access_token' => $accessToken, 'user' => $user]);
         } catch (\Exception $e) {
             Log::error($e);
-            return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION);
+            return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION,$e->getMessage());
         }
     }
 
