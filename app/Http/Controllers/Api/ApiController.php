@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Enums\MessageEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BankResource;
+use App\Http\Resources\TransferTypeResource;
 use App\Http\Response\ApiResponse;
 use App\Models\BankList;
+use App\Models\TransactionType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -16,11 +18,23 @@ use Seshac\Otp\Otp;
 
 class ApiController extends Controller
 {
+
     public function getBanks(): JsonResponse
     {
         try {
             $banks = BankList::active()->get();
             return app(ApiResponse::class)->success(BankResource::collection($banks));
+        } catch (\Exception $e) {
+            Log::error($e);
+            return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION);
+        }
+    }
+
+    public function getTransferType(): JsonResponse
+    {
+        try {
+            $banks = TransactionType::active()->get();
+            return app(ApiResponse::class)->success(TransferTypeResource::collection($banks));
         } catch (\Exception $e) {
             Log::error($e);
             return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION);

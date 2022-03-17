@@ -11,5 +11,11 @@ class TransactionType extends Model
 
     protected $fillable = [
         'name',
+        'status',
     ];
+
+    public function scopeActive($q)
+    {
+        $q->where('status', 1);
+    }
 }
