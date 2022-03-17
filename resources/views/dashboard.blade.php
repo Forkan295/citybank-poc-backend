@@ -16,8 +16,6 @@
       <!-- /End replace -->
 </div>
 @endsection
-<<<<<<< HEAD
-=======
 {{--<x-app-layout>--}}
 {{--    <div class="py-4">--}}
 {{--        <div class="max-w-7 mx-auto sm:px-6 lg:px-8">--}}
@@ -115,4 +113,3 @@
 
 
 {{--</x-app-layout>--}}
->>>>>>> forkan_dev

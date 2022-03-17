@@ -42,7 +42,7 @@ class BeneficiaryController extends Controller
             return app(ApiResponse::class)->success('', MessageEnum::SUCCESS);
         } catch (\Exception $exception) {
             return app(ApiResponse::class)->error($exception->getMessage());
-        }
+        }   
     }
 
     /**
