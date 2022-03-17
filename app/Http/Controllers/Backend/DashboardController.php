@@ -11,18 +11,22 @@ class DashboardController extends Controller
 {
     public function index()
     {
-    	$totalBankAdmin = $this->getUserCountByRole(1);
-    	$totalBankClient = $this->getUserCountByRole(2);
-    	$totalBankUser = $this->getUserCountByRole(3);
+    	$totalBankAdmin = $this->getUserByRole(1)->count();
+    	$totalBankClient = $this->getUserByRole(2)->count();
     	$totalOauth2Client = OauthClient::get()->count();
     	
-    	$users = User::where('role', 2)->latest()->take(10)->get();
+    	$totalBankUser = $totalBankAdmin + $totalBankClient + $totalOauth2Client;
+    	
+    	$users = $this->getUserByRole(2)
+    					->latest()
+    					->take(10)
+    					->get();
 
     	return view('dashboard', compact('users', 'totalBankAdmin', 'totalBankClient', 'totalBankUser', 'totalOauth2Client'));
     }
 
-    private function getUserCountByRole($role)
+    private function getUserByRole($role)
     {
-    	return User::where('role', $role)->count();
+    	return User::where('role', $role);
     }
 }
