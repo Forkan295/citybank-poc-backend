@@ -33,17 +33,6 @@ class ClientController extends Controller
             'client_type' => 'required',
         ]);
         switch ($request->client_type) {
-//            case 'default':
-//                $request->validate([
-//                    'name' => 'required|max:255',
-//                    'redirect' => 'required|url',
-//                ]);
-//                $redirect = $request->redirect;
-//                $provider = null;
-//                $personalAccess = false;
-//                $password = false;
-//                $confidential = true;
-//                break;
             case 'pkce':
                 $request->validate([
                     'name' => 'required|max:255',
