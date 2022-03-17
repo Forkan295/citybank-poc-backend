@@ -35,7 +35,7 @@ class UserController extends Controller
     		'phone' => 'required',
     		'role' => 'required',
     		'account_type' => 'required',
-    		'account_no' => 'required|integer',
+    		'account_no' => 'required|integer|unique:accounts,account_no',
     		'balance' => 'nullable|integer',
     		'status' => 'required',
     		'password' => 'required|min:4|confirmed',
@@ -58,7 +58,7 @@ class UserController extends Controller
     		$accountData = [
     			'account_no' => $request->account_no,
     			'type_id' => $request->account_type,
-    			'date_opened' => date('Y-m-d'),
+    			'opening_date' => date('Y-m-d'),
     			'balance' => $request->balance ?? 0.00,
     			'is_primary_account' => $request->is_primary ?? 0,
     			'status' => $request->status,
@@ -74,6 +74,13 @@ class UserController extends Controller
 
     		return redirect()->back()->with('error', 'Something went wrong.');
     	}
+    }
+
+    public function show(User $user)
+    {
+        $user = User::findOrFail($user->id);
+
+        return view('users.show', compact('user'));
     }
 
     public function edit(User $user)

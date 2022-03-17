@@ -5,7 +5,7 @@
         <div class="px-4 sm:px-6 lg:px-8">
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
-                    <h1 class="text-xl font-semibold text-gray-900">Client List</h1>
+                    <h1 class="text-xl font-semibold text-gray-900">OAuth2 Client List</h1>
                 </div>
 
                 <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -20,8 +20,8 @@
                             <table class="min-w-full">
                                 <thead class="bg-white">
                                   <tr>
+                                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">User ID</th>
                                     <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">ID</th>
                                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Secret</th>
                                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Redirect</th>
                                   </tr>
@@ -29,8 +29,10 @@
                                 <tbody class="bg-white">
                                     @foreach ($clients as $client)
                                     <tr class="border-t border-gray-300">
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-6">
+                                            <a href="{{ route('user.show', $client->user_id ?? '') }}" style="color:green">{{ $client->user_id }}</a>
+                                        </td>
                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ $client->name }}</td>
-                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ $client->id }}</td>
                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ $client->secret }}</td>
                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ $client->redirect }}</td>
                                     </tr>
@@ -44,4 +46,5 @@
         </div>
     </div>
 </div>
+@include('layouts.footer')
 @endsection

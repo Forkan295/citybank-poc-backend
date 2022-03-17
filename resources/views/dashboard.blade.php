@@ -1,115 +1,86 @@
 @extends('layouts.app')
 @section('content')
-<div class="py-6">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-      <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
-    </div>
-</div>
-
 <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-      <!-- Replace with your content -->
     <div class="py-4">
         <div class="border-1 border-dashed border-gray-200 rounded-lg h-96">
+	  		<ul role="list" class="h-20 mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
+		    	<li class="col-span-1 flex shadow-sm rounded-md">
+		      		<div class="flex-shrink-0 flex items-center justify-center w-16 bg-pink-600 text-white text-sm font-medium rounded-l-md"></div>
+		      		<div class="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
+		        		<div class="flex-1 px-4 py-2 text-sm truncate">
+		          			<a href="#" class="text-gray-900 font-medium hover:text-gray-600">Total Bank Admin</a>
+		          			<p class="text-gray-500">{{ $totalBankAdmin }}</p>
+		        		</div>
+		      		</div>
+		    	</li>
 
+
+		    	<li class="col-span-1 flex shadow-sm rounded-md">
+		      		<div class="flex-shrink-0 flex items-center justify-center w-16 bg-yellow-500 text-white text-sm font-medium rounded-l-md"></div>
+		      		<div class="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
+		        		<div class="flex-1 px-4 py-2 text-sm truncate">
+		          			<a href="#" class="text-gray-900 font-medium hover:text-gray-600">Total Bank Client</a>
+		          			<p class="text-gray-500">{{ $totalBankClient }}</p>
+		        		</div>
+		      		</div>
+		    	</li>
+
+		    	<li class="col-span-1 flex shadow-sm rounded-md">
+		      		<div class="flex-shrink-0 flex items-center justify-center w-16 bg-purple-600 text-white text-sm font-medium rounded-l-md"></div>
+		      		<div class="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
+		        		<div class="flex-1 px-4 py-2 text-sm truncate">
+		          			<a href="#" class="text-gray-900 font-medium hover:text-gray-600">Total OAuth2 Client</a>
+		          			<p class="text-gray-500">{{ $totalOauth2Client }}</p>
+		        		</div>
+		      		</div>
+		    	</li>
+
+		    	<li class="col-span-1 flex shadow-sm rounded-md">
+      				<div class="flex-shrink-0 flex items-center justify-center w-16 bg-green-500 text-white text-sm font-medium rounded-l-md"></div>
+      				<div class="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
+        				<div class="flex-1 px-4 py-2 text-sm truncate">
+          					<a href="#" class="text-gray-900 font-medium hover:text-gray-600">Total User</a>
+          					<p class="text-gray-500">{{ $totalBankUser }}</p>
+        				</div>
+      				</div>
+				</li>
+		  	</ul>
+
+            <div class="mt-8 -my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+            		<div class="sm:flex-auto">
+	                    <h1 class="text-xl font-semibold text-gray-900">Latest register bank clients</h1>
+	                </div>
+
+                    <div class="mt-4 overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                        <table class="min-w-full">
+                            <thead class="bg-white">
+                              <tr>
+                                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Phone</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Account No.</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Address</th>
+                              </tr>
+                            </thead>
+                            <tbody class="bg-white">
+                                @foreach ($users as $user)
+                                <tr class="border-t border-gray-300">
+                                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ $user->name }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $user->email }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $user->phone }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $user->accounts->implode('account_no', ', ') }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $user->address }}</td>
+                                </tr>
+                              @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-      <!-- /End replace -->
 </div>
+
+@include('layouts.footer')
 @endsection
-{{--<x-app-layout>--}}
-{{--    <div class="py-4">--}}
-{{--        <div class="max-w-7 mx-auto sm:px-6 lg:px-8">--}}
-{{--            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">--}}
-{{--                <div class="p-6 bg-white border-b border-gray-200">--}}
-{{--                    <div class="">--}}
-{{--                        <div class="w-1/2">--}}
-{{--                            <div class="p-6">--}}
-{{--                                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">--}}
-{{--                                    <div class="p-6 bg-white border-b border-gray-200">--}}
-{{--                                        <form method="POST" action="/oauth/clients">--}}
-{{--                                        @csrf--}}
-
-{{--                                        <!-- Name  -->--}}
-{{--                                            <div>--}}
-{{--                                                <x-label for="name" :value="__('name')"/>--}}
-{{--                                                <x-input id="name" class="block mt-1 w-full" type="text" name="name"--}}
-{{--                                                         :value="old('name')" placeholder="Client name" required--}}
-{{--                                                         autofocus/>--}}
-{{--                                            </div>--}}
-
-{{--                                            <!-- url  -->--}}
-{{--                                            <div class="py-4">--}}
-{{--                                                <x-label for="redirect" :value="__('Redirect Link')"/>--}}
-{{--                                                <x-input id="redirect" class="block mt-1 w-full" type="text"--}}
-{{--                                                         name="redirect" required autofocus/>--}}
-{{--                                            </div>--}}
-{{--                                            <div class="py-4">--}}
-{{--                                                <x-label for="redirect" :value="__('Password Grand')"/>--}}
-{{--                                                <x-input id="redirect" class="block mt-1" type="checkbox"--}}
-{{--                                                         name="password_client" value="1" required autofocus/>--}}
-{{--                                            </div>--}}
-
-
-{{--                                            <div class="flex  justify-start">--}}
-{{--                                                <x-button>--}}
-{{--                                                    {{ __('Create Client') }}--}}
-{{--                                                </x-button>--}}
-{{--                                            </div>--}}
-
-{{--                                        </form>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                        <div class="flex flex-col">--}}
-{{--                            <div class="overflow-x-auto shadow-md sm:rounded-lg">--}}
-{{--                                <div class="inline-block min-w-full align-middle">--}}
-{{--                                    <div class="overflow-hidden">--}}
-{{--                                        <table--}}
-{{--                                            class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">--}}
-{{--                                            <thead class="bg-gray-100 dark:bg-gray-900 py-12">--}}
-{{--                                            <tr>--}}
-{{--                                                <th scope="col"--}}
-{{--                                                    class="py-4 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">--}}
-{{--                                                    Name--}}
-{{--                                                </th>--}}
-{{--                                                <th scope="col"--}}
-{{--                                                    class="py-4 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">--}}
-{{--                                                    ID--}}
-{{--                                                </th>--}}
-{{--                                                <th scope="col"--}}
-{{--                                                    class="py-4 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">--}}
-{{--                                                    Secret--}}
-{{--                                                </th>--}}
-{{--                                                <th scope="col"--}}
-{{--                                                    class="py-4 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">--}}
-{{--                                                    Redirect--}}
-{{--                                                </th>--}}
-{{--                                            </tr>--}}
-{{--                                            </thead>--}}
-{{--                                            <tbody--}}
-{{--                                                class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">--}}
-{{--                                            @foreach ($clients as $client)--}}
-{{--                                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-900">--}}
-{{--                                                    <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $client->name }}</td>--}}
-{{--                                                    <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $client->id }}</td>--}}
-{{--                                                    <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $client->secret }}</td>--}}
-{{--                                                    <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $client->redirect }}</td>--}}
-{{--                                                </tr>--}}
-{{--                                            @endforeach--}}
-{{--                                            </tbody>--}}
-{{--                                        </table>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-
-{{--                </div>--}}
-
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-
-
-{{--</x-app-layout>--}}

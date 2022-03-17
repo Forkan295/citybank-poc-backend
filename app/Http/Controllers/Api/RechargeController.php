@@ -16,6 +16,7 @@ use App\Enums\MessageEnum;
 use App\Models\Account;
 use App\Models\User;
 use Seshac\Otp\Otp;
+use Carbon\Carbon;
 
 class RechargeController extends Controller
 {
@@ -50,9 +51,12 @@ class RechargeController extends Controller
 	    		'user_id' => $this->userId,
 	    		'account_id' => $this->userAccount->id,
 	    		'amount' => $request->recharge_amount,
+                'previous_amount' => $this->currentBalance,
+                'transfer_amount' => $request->recharge_amount,
 	    		'type_id' => $this->transactionType,
-	    		'description' => 'Recharge',
-	    		'status' => true,
+                'transaction_date' => Carbon::now(),
+	    		'remarks' => 'Recharge',
+	    		'status' => 'success',
 	    	];
 
             $verify = Otp::validate($request->phone_number, $request->otp);
@@ -84,8 +88,8 @@ class RechargeController extends Controller
 	    		'account_number' => $this->userAccount->account_no,
 	    		'type_id' => $this->transactionType,
 	    		'type_name' => 'recharge',
-	    		'account_balance_before_recharge' => $this->currentBalance,
-	    		'account_balance_after_recharge' => $balance,
+	    		'balance_before_recharge' => $this->currentBalance,
+	    		'balance_after_recharge' => $balance,
 	    		'recharge_amount' => $request->recharge_amount,
 	    		'operator_name' => $request->operator_name,
 	    		'phone_number' => $request->phone_number,

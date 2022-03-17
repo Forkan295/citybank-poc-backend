@@ -5,7 +5,7 @@
         <div class="px-4 sm:px-6 lg:px-8">
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
-                    <h1 class="text-xl font-semibold text-gray-900">New</h1>
+                    <h1 class="text-xl font-semibold text-gray-900">Create Bank Client</h1>
                 </div>
                 
                 <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -60,7 +60,7 @@
                                           <select id="role" name="role" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                 <option value="">Select Role</option>
                                                 @foreach ($roles as $key => $role)
-                                                    <option value="{{ $key }}" >{{ $role }}</option>
+                                                    <option value="{{ $key }}" @if(old('role') == $key)selected @endif>{{ $role }}</option>
                                                 @endforeach
                                           </select>
                                           @if ($errors->has('role'))
@@ -125,16 +125,12 @@
                                         </div>
                                     </div>
 
-                                    <div class="mt-4 space-y-4">
-                                        <div class="flex items-start">
-                                            <div class="h-5 flex items-center">
-                                                <input id="is_primary" name="is_primary" type="checkbox" value="1" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" checked>
-                                            </div>
-                                            <div class="ml-3 text-sm">
-                                              <label for="is_primary" class="font-medium text-gray-700">Is Primary Account ?</label>
-                                            </div>
+                                    <div class="grid grid-cols-6 gap-6">
+                                        <div class="col-span-6 sm:col-span-3">
+                                            <input id="is_primary" name="is_primary" type="checkbox" value="1" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" checked>
+                                            <label for="is_primary" class="font-medium text-gray-700">Is Primary Account ?</label>
                                         </div>
-                                    <div>
+                                    </div>
 
                                     <div class="grid grid-cols-6 gap-6 mt-5">
                                         <div class="col-span-6 sm:col-span-3">
@@ -166,4 +162,5 @@
         </div>
     </div>
 </div>
+@include('layouts.footer')
 @endsection
