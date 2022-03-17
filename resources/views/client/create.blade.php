@@ -1,11 +1,11 @@
 @extends('layouts.app')
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8" style="min-height: 430px">
     <div class="py-4">
         <div class="px-4 sm:px-6 lg:px-8">
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
-                    <h1 class="text-xl font-semibold text-gray-900">New</h1>
+                    <h1 class="text-xl font-semibold text-gray-900">Create OAuth2 Client</h1>
                 </div>
                 
                 <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -27,17 +27,16 @@
                             
                             <div class="shadow sm:rounded-md sm:overflow-hidden">
                                 <div class="bg-white py-6 px-4 space-y-6 sm:p-6">
-                                    <div class="grid grid-cols-12 gap-6">
-                                        <div class="col-span-6 sm:col-span-3">
-                                          <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                                          <input type="text" name="name" id="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <div class="col-span-12 sm:col-span-3">
+                                      <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                                      <input type="text" name="name" id="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 
-                                          @if ($errors->has('name'))
-                                            <span class="text-sm text-red-600">{{ $errors->first('name') }}</span>
-                                          @endif
-                                        </div>
-                                
-                                        <div class="col-span-6 sm:col-span-3">
+                                      @if ($errors->has('name'))
+                                        <span class="text-sm text-red-600">{{ $errors->first('name') }}</span>
+                                      @endif
+                                    </div>
+
+                                        <div class="col-span-12 sm:col-span-3">
                                             <label for="redirect" class="block text-sm font-medium text-gray-700">Redirect Link</label>
                                             <input type="text" name="redirect" id="redirect" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                             @if ($errors->has('redirect'))
@@ -58,4 +57,5 @@
         </div>
     </div>
 </div>
+@include('layouts.footer')
 @endsection

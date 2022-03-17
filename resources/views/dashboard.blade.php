@@ -1,18 +1,86 @@
 @extends('layouts.app')
 @section('content')
-<div class="py-6">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-      <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+    <div class="py-4">
+        <div class="border-1 border-dashed border-gray-200 rounded-lg h-96">
+	  		<ul role="list" class="h-20 mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
+		    	<li class="col-span-1 flex shadow-sm rounded-md">
+		      		<div class="flex-shrink-0 flex items-center justify-center w-16 bg-pink-600 text-white text-sm font-medium rounded-l-md"></div>
+		      		<div class="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
+		        		<div class="flex-1 px-4 py-2 text-sm truncate">
+		          			<a href="#" class="text-gray-900 font-medium hover:text-gray-600">Total Bank Admin</a>
+		          			<p class="text-gray-500">{{ $totalBankAdmin }}</p>
+		        		</div>
+		      		</div>
+		    	</li>
+
+
+		    	<li class="col-span-1 flex shadow-sm rounded-md">
+		      		<div class="flex-shrink-0 flex items-center justify-center w-16 bg-yellow-500 text-white text-sm font-medium rounded-l-md"></div>
+		      		<div class="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
+		        		<div class="flex-1 px-4 py-2 text-sm truncate">
+		          			<a href="#" class="text-gray-900 font-medium hover:text-gray-600">Total Bank Client</a>
+		          			<p class="text-gray-500">{{ $totalBankClient }}</p>
+		        		</div>
+		      		</div>
+		    	</li>
+
+		    	<li class="col-span-1 flex shadow-sm rounded-md">
+		      		<div class="flex-shrink-0 flex items-center justify-center w-16 bg-purple-600 text-white text-sm font-medium rounded-l-md"></div>
+		      		<div class="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
+		        		<div class="flex-1 px-4 py-2 text-sm truncate">
+		          			<a href="#" class="text-gray-900 font-medium hover:text-gray-600">Total OAuth2 Client</a>
+		          			<p class="text-gray-500">{{ $totalOauth2Client }}</p>
+		        		</div>
+		      		</div>
+		    	</li>
+
+		    	<li class="col-span-1 flex shadow-sm rounded-md">
+      				<div class="flex-shrink-0 flex items-center justify-center w-16 bg-green-500 text-white text-sm font-medium rounded-l-md">RC</div>
+      				<div class="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
+        				<div class="flex-1 px-4 py-2 text-sm truncate">
+          					<a href="#" class="text-gray-900 font-medium hover:text-gray-600">Total User</a>
+          					<p class="text-gray-500">{{ $totalBankUser }}</p>
+        				</div>
+      				</div>
+				</li>
+		  	</ul>
+
+            <div class="mt-8 -my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+            		<div class="sm:flex-auto">
+	                    <h1 class="text-xl font-semibold text-gray-900">Latest register bank clients</h1>
+	                </div>
+
+                    <div class="mt-4 overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                        <table class="min-w-full">
+                            <thead class="bg-white">
+                              <tr>
+                                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Phone</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Account No.</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Address</th>
+                              </tr>
+                            </thead>
+                            <tbody class="bg-white">
+                                @foreach ($users as $user)
+                                <tr class="border-t border-gray-300">
+                                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ $user->name }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $user->email }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $user->phone }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $user->accounts->implode('account_no', ', ') }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $user->address }}</td>
+                                </tr>
+                              @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-      <!-- Replace with your content -->
-    <div class="py-4">
-        <div class="border-1 border-dashed border-gray-200 rounded-lg h-96">
-            
-        </div>
-    </div>
-      <!-- /End replace -->
-</div>
+@include('layouts.footer')
 @endsection

@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\BankList;
+use App\Models\OauthClient;
 
 class ClientController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-    	$clients = $request->user()->clients;
+    	$clients = OauthClient::all();
 
     	return view('client.index', compact('clients'));
     }

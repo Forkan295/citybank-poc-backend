@@ -1,11 +1,11 @@
 @extends('layouts.app')
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8" style="min-height: 450px">
     <div class="py-4">
         <div class="px-4 sm:px-6 lg:px-8">
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
-                    <h1 class="text-xl font-semibold text-gray-900">User List</h1>
+                    <h1 class="text-xl font-semibold text-gray-900">Bank Client List</h1>
                 </div>
                 
                 <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -57,4 +57,5 @@
         </div>
     </div>
 </div>
+@include('layouts.footer')
 @endsection

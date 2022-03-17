@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\BankListController;
 use App\Http\Controllers\Backend\MobileOperatorListController;
 use App\Http\Controllers\Backend\ClientController;
 use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\Backend\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -78,11 +79,7 @@ Route::post('webauthn/login', [WebAuthnLoginController::class, 'login'])
 
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/dashboard', function (Request $request) {
-        return view('dashboard',[
-            'clients'=> $request->user()->clients
-        ]);
-    })->name('dashboard.index');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     Route::get('clients', [ClientController::class, 'index'])->name('client.index');
     Route::get('clients/create', [ClientController::class, 'create'])->name('client.create');
