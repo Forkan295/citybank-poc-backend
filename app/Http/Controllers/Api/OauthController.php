@@ -30,7 +30,6 @@ class OauthController extends AccessTokenController
      */
     public function getAuthorization(Request $request)
     {
-
         $query = http_build_query([
             'client_id'             => $request->client_id,
             'redirect_uri'          => $request->redirect_uri,
@@ -49,7 +48,7 @@ class OauthController extends AccessTokenController
      */
     public function token(Request $request)
     {
-        $data=[];
+        $data = [];
         switch ($request->grant_type) {
             case 'password':
                 $request->merge($this->formatData($request));

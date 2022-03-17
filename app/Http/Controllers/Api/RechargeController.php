@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\RechargeRequest;
 use App\Http\Controllers\Controller;
+use App\Service\RechargeService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Response\ApiResponse;
 use Illuminate\Support\Facades\DB;
@@ -15,142 +17,47 @@ use App\Models\Transaction;
 use App\Enums\MessageEnum;
 use App\Models\Account;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Seshac\Otp\Otp;
 
 class RechargeController extends Controller
 {
-	private $userId;
-	private $userAccount;
-	private $currentBalance;
-	private $transactionType;
 
-	public function __construct()
-	{
-		$this->userId = $this->getUserId();
-		$this->userAccount = $this->getUserAccount();
-		$this->currentBalance = $this->getUserCurrentBalance();
-		$this->transactionType = $this->getTransactionTypeId('recharge');
-	}
 
-	/**
-	 * [recharge description]
-	 * @param  RechargeRequest $request [description]
-	 * @return [type]                   [description]
-	 */
-    public function recharge(RechargeRequest $request)
+    public function balanceRecharge(RechargeRequest $request): JsonResponse
     {
-        $operatorId = MobileOperator::where('name', $request->operator_name)
-                                ->pluck('id')
-                                ->first();
+        try {
+            $user        = auth('api')->user();
+            $userAccount = $user->accounts()->isPrimaryAccount()->first();
+            $amount      = data_get($request, 'recharge_amount');
+            $prepareData = app(RechargeService::class)->prepareTransactionData($request, $userAccount);
+            $verifyOtp   = Otp::validate($user->phone, $request->otp);
 
-    	DB::beginTransaction();
-
-    	try {
-	    	$data = [
-	    		'user_id' => $this->userId,
-	    		'account_id' => $this->userAccount->id,
-	    		'amount' => $request->recharge_amount,
-	    		'type_id' => $this->transactionType,
-	    		'description' => 'Recharge',
-	    		'status' => true,
-	    	];
-
-            $verify = Otp::validate($request->phone_number, $request->otp);
-
-            if (! $verify->status) {
-                return app(ApiResponse::class)->error($verify->message);
+            //verify otp
+            if (!$verifyOtp->status) {
+                return app(ApiResponse::class)->error($verifyOtp->message);
             }
 
-    		$transaction = Transaction::create($data);
+            //check available balance
+            if ($userAccount->balance < $amount) {
+                return app(ApiResponse::class)->error(MessageEnum::INSUFFICIENT_AMOUNT);
+            }
 
-    		$recharge = [
-    			'operator_id' => $operatorId,
-		    	'phone_number' => $request->phone_number,
-		    	'recharge_amount' => $request->recharge_amount,
-		    	'status' => true,
-    		];
+            //transaction create
+            $transaction = $user->transactions()->create($prepareData);
 
-    		$transaction->recharge()->create($recharge);
+            if ($transaction) {
+                $rechargeInfo = app(RechargeService::class)->prepareRechargeData($request);
+                $userAccount->decrement('balance', $amount);
+                $transaction->recharge()->create($rechargeInfo);
+            }
 
-    		// Account balance update after recharge!
-    		$balance = $this->currentBalance - $request->recharge_amount;
-
-    		$transaction->account()->update([
-    			'balance' => $balance
-    		]);
-    	
-    		$activityLog = [
-	    		'account_id' => $this->userAccount->id,
-	    		'account_number' => $this->userAccount->account_no,
-	    		'type_id' => $this->transactionType,
-	    		'type_name' => 'recharge',
-	    		'account_balance_before_recharge' => $this->currentBalance,
-	    		'account_balance_after_recharge' => $balance,
-	    		'recharge_amount' => $request->recharge_amount,
-	    		'operator_name' => $request->operator_name,
-	    		'phone_number' => $request->phone_number,
-	    		'description' => 'Recharge',
-	    		'status' => true,
-    		];
-    		
-    		activity('recharge')
-    			->withProperties($activityLog)
-    			->log('Recharge');
-
-    		DB::commit();
-
-    		return app(ApiResponse::class)->success([
-    			'message' => 'You have successfully recharged.'
-    		]);
-    	} catch (\Exception $e) {
-		    DB::rollback();
-
-		    return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION);
-		}
+            return app(ApiResponse::class)->success('', MessageEnum::SUCCESS);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return app(ApiResponse::class)->exception(MessageEnum::SERVER_EXCEPTION);
+        }
     }
 
-    /**
-     * [getUserId description]
-     * @return [type] [int]
-     */
-    protected function getUserId()
-    {
-    	return data_get(auth('api')->user(), 'id');
-    }
-    
-    /**
-     * [getUserAccount description]
-     * @return [type] [description]
-     */
-    protected function getUserAccount()
-    {
-    	$userAccount = Account::where('user_id', $this->userId)
-    						->isPrimaryAccount()
-    						->first();
 
-    	return $userAccount;
-    }
-
-    /**
-     * [getUserCurrentBalance description]
-     * @return [type] [description]
-     */
-    private function getUserCurrentBalance()
-    {
-    	return $this->userAccount ? $this->userAccount->balance : 0;
-    }
-
-    /**
-     * [getTransactionTypeId description]
-     * @param  [string] $typeName [description]
-     * @return [int]           [description]
-     */
-    protected function getTransactionTypeId($typeName)
-    {
-    	$typeId = TransactionType::where('name', $typeName)
-    						->pluck('id')
-    						->first();
-
-    	return $typeId;
-    }
 }

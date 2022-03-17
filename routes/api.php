@@ -4,11 +4,9 @@ use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Api\OauthController as AthorizeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\RechargeController;
 use App\Http\Controllers\Api\BeneficiaryController;
-use App\Http\Controllers\Api\MobileOperatorController;
 use App\Http\Controllers\Auth\WebAuthnLoginController;
 use App\Http\Controllers\Auth\WebAuthnRegisterController;
 
@@ -37,6 +35,8 @@ Route::group(['name' => 'v1.', 'middleware' => 'apilogger'], function () {
 
 
     Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+
         //=========== biometric register ===========================
         Route::group(['prefix' => 'webauthn'], function () {
             Route::post('/register/options',
@@ -54,18 +54,16 @@ Route::group(['name' => 'v1.', 'middleware' => 'apilogger'], function () {
         Route::group(['prefix' => 'user'], function () {
             Route::get('/', [AuthController::class, 'getProfile'])->name('user.profile');
             Route::get('/accounts', [AccountController::class, 'getAccounts']);
+            Route::get('/transactions', [AccountController::class, 'getTransactions']);
             Route::post('/balance-transfer', [AccountController::class, 'balanceTransfer']);
-            Route::post('/transactions', [AccountController::class, 'getTransaction']);
-            Route::post('recharge', [RechargeController::class, 'recharge']);
-            Route::post('/logout', [UserController::class, 'logout']);
+            Route::post('recharge', [RechargeController::class, 'balanceRecharge']);
         });
 
         Route::group(['prefix' => 'common'], function () {
             Route::get('/banks', [ApiController::class, 'getBanks'])->name('common.banks');
-            Route::get('/transaction-types', [ApiController::class, 'getTransferType'])->name('common.transaction-types');
-            Route::get('/mobile-operators', [MobileOperatorController::class, 'getOperator'])->name('common.mobile-operators');
+            Route::get('/transaction-types',[ApiController::class, 'getTransactionTypes'])->name('common.transaction-types');
+            Route::get('/mobile-operators', [ApiController::class, 'getOperators'])->name('common.mobile-operators');
             Route::post('/send-otp', [ApiController::class, 'generateOtp'])->name('common.send-otp');
-//            Route::post('/validate-otp', [ApiController::class, 'validateOtp'])->name('common.validate-otp');
         });
     });
 });

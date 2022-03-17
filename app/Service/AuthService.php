@@ -57,7 +57,7 @@ class AuthService
     }
 
 
-    public function prepareTransferData(Request $request, $primaryAccount): array
+    public function prepareTransactionData(Request $request, $primaryAccount): array
     {
         return [
             'account_id'       => data_get($primaryAccount, 'id'),
