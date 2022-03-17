@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Seshac\Otp\Otp;
 
 
 class AccountController extends Controller
@@ -29,13 +30,18 @@ class AccountController extends Controller
     }
 
 
-    public function balanceTransfer(Request $request): JsonResponse
+    public function balanceTransfer(TransferRequest $request): JsonResponse
     {
         try {
             $user           = auth('api')->user();
             $primaryAccount = $user->accounts()->isPrimaryAccount()->first();
             $amount         = data_get($request, 'amount');
             $prepareData    = app(AuthService::class)->prepareTransferData($request, $primaryAccount);
+            $verify         = Otp::validate($user->phone, $request->otp);
+
+            if (!$verify->status) {
+                return app(ApiResponse::class)->error($verify->message);
+            }
 
             if ($primaryAccount->balance < $amount) {
                 return app(ApiResponse::class)->error(MessageEnum::INSUFFICIENT_AMOUNT);

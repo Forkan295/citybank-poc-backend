@@ -36,15 +36,6 @@ Route::group(['name' => 'v1.'], function () {
 
 
     Route::group(['middleware' => 'auth:api'], function () {
-        Route::group(['prefix' => 'beneficiary'], function () {
-            Route::get('/', [BeneficiaryController::class, 'index'])->name('beneficiary.index');
-            Route::post('/create', [BeneficiaryController::class, 'store'])->name('beneficiary.create');
-            Route::put('/{beneficiary}', [BeneficiaryController::class, 'update'])->name('beneficiary.update');
-            Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])->name('beneficiary.destroy');
-        });
-
-        Route::post('recharge', [RechargeController::class, 'recharge']);
-
         //=========== biometric register ===========================
         Route::group(['prefix' => 'webauthn'], function () {
             Route::post('/register/options',
@@ -60,10 +51,21 @@ Route::group(['name' => 'v1.'], function () {
             Route::post('/logout', [UserController::class, 'logout']);
         });
 
+
+        Route::group(['prefix' => 'beneficiary'], function () {
+            Route::get('/', [BeneficiaryController::class, 'index'])->name('beneficiary.index');
+            Route::post('/create', [BeneficiaryController::class, 'store'])->name('beneficiary.create');
+            Route::put('/{beneficiary}', [BeneficiaryController::class, 'update'])->name('beneficiary.update');
+            Route::delete('/{beneficiary}', [BeneficiaryController::class, 'destroy'])->name('beneficiary.destroy');
+        });
+
+        Route::post('recharge', [RechargeController::class, 'recharge']);
+
         Route::group(['prefix' => 'common'], function () {
             Route::get('/banks', [ApiController::class, 'getBanks'])->name('common.banks');
+            Route::get('/transaction-types', [ApiController::class, 'getTransferType'])->name('common.transaction-types');
             Route::post('/send-otp', [ApiController::class, 'generateOtp'])->name('common.send-otp');
-            Route::post('/validate-otp', [ApiController::class, 'validateOtp'])->name('common.validate-otp');
+//            Route::post('/validate-otp', [ApiController::class, 'validateOtp'])->name('common.validate-otp');
         });
     });
 });
