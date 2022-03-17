@@ -76,6 +76,13 @@ class UserController extends Controller
     	}
     }
 
+    public function show(User $user)
+    {
+        $user = User::findOrFail($user->id);
+
+        return view('users.show', compact('user'));
+    }
+
     public function edit(User $user)
     {
     	$roles = User::$role;
