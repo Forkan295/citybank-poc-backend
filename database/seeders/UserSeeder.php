@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
+use App\Models\User;
 
 class UserSeeder extends Seeder
 {
@@ -15,26 +15,32 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-
-        User::insert([
+        $data = [
             [
-                'name' => 'Admin',
+                'name' => 'OAuth2 Admin',
                 'uuid' => Str::uuid(),
-                'email' => 'admin@mail.com',
-                'password' => bcrypt('password'),
+                'email' => 'oauth2@admin.com',
+                'password' => bcrypt('swt@123'),
+                'role' => 'oauth',
             ],
             [
-                'name' => 'User',
+                'name' => 'API Admin',
                 'uuid' => Str::uuid(),
-                'email' => 'user@mail.com',
-                'password' => bcrypt('123456'),
+                'email' => 'api@admin.com',
+                'password' => bcrypt('swt@123'),
+                'role' => 'api',
             ],
             [
                 'name' => 'Client',
                 'uuid' => Str::uuid(),
-                'email' => 'client@mail.com',
-                'password' => bcrypt('123456'),
-            ]
-        ]);
+                'email' => 'client@admin.com',
+                'password' => bcrypt('swt@123'),
+                'role' => 'client',
+            ],
+        ];
+
+        foreach ($data as $item) {
+            User::create($item);
+        }
     }
 }
