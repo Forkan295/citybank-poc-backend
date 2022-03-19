@@ -32,6 +32,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $role = Auth::guard('web')->user()->role;
+
+        if ($role == 'bank_client') {
+            return redirect()->route('profile.index');
+        } elseif ($role == 'client') {
+            return redirect()->route('client.get_all');
+        }
+
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
