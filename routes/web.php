@@ -29,56 +29,29 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//Route::get('/auth/callback', function (Request $request) {
-//   dd( $request->all());
-//    $state = $request->session()->pull('state');
-//
-////    throw_unless(
-////        strlen($state) > 0 && $state === $request->state,
-////        InvalidArgumentException::class
-////    );
-//
-//
-//    $client = $request->user()->clients()->find('95c4bf6f-f986-4486-9e04-902e11264b2f');
-////    dd($request->all(),$request->session(),$request->session()->get('authRequest'));
-//
-//    $response = Http::asForm()->post('http://oauth2-poc.test:8080/oauth/token', [
-//        'grant_type' => 'authorization_code',
-//        'client_id' => $client->id,
-//        'client_secret' => $client->secret,
-//        'redirect_uri' => $client->redirect,
-//        'code' => $request->code,
-//    ]);
-//
-//
-//    return $response->json();
-//});
-//
-//Route::group(['middleware' => ['auth']], function () {
-//
-//    Route::get('/oauth/clients',function(Request $request){
-//            return view('oauth.clients',[
-//                'clients'=> $request->user()->clients
-//            ]);
-//    })->name('oauth.authorized');
-//
-//});
-
 Route::group(['middleware' => ['auth']], function () {
+    Route::domain(config('app.sub_domain'))->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::get('mobile-operator-list', [MobileOperatorListController::class, 'index'])->name('mobile_operator_list.index');
+        Route::get('bank-list', [BankListController::class, 'index'])->name('bank_list.index');
+        Route::get('client-list', [ClientController::class, 'getClients'])->name('client.get_all');
+    });
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
+    // only for client SK
     Route::get('clients', [ClientController::class, 'index'])->name('client.index');
+
+    Route::get('client-list', [ClientController::class, 'getClients'])->name('client.get_all');
     Route::get('clients/create', [ClientController::class, 'create'])->name('client.create');
     Route::post('clients', [ClientController::class, 'store'])->name('client.store');
+    Route::get('clients/{client}', [ClientController::class, 'destroy'])->name('client.delete');
 
     Route::get('activity-log', [ActivityLogController::class, 'index'])->name('activity_log.index');
     Route::get('activity-log/{id}/show', [ActivityLogController::class, 'show'])->name('activity_log.show');
 
     Route::get('my-profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('my-profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
-
-    Route::get('bank-list', [BankListController::class, 'index'])->name('bank_list.index');
-    Route::get('mobile-operator-list', [MobileOperatorListController::class, 'index'])->name('mobile_operator_list.index');
 
     Route::get('users', [UserController::class, 'index'])->name('user.index');
     Route::get('users/create', [UserController::class, 'create'])->name('user.create');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use Laravel\Passport\ClientRepository;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\BankList;
 
@@ -58,5 +59,19 @@ class ClientController extends Controller
         ClientRepository::create(auth()->user()->id, $request->name, $redirect,$provider,$personalAccess,$password,$confidential);
 
         return redirect()->back()->with('success', 'Client succssfully created!');
+    }
+
+    public function getClients()
+    {
+        $clients = DB::table('oauth_clients')->get();
+
+        return view('client.show', compact('clients'));
+    }
+
+    public function destroy($id)
+    {
+        DB::table('oauth_clients')->where('id', $id)->delete();
+        
+        return back();
     }
 }
