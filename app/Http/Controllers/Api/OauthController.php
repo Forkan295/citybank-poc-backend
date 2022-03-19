@@ -32,7 +32,6 @@ class OauthController extends AccessTokenController
      */
     public function getAuthorization(Request $request)
     {
-
         $query = http_build_query([
             'client_id'             => $request->client_id,
             'redirect_uri'          => $request->redirect_uri,
@@ -70,6 +69,4 @@ class OauthController extends AccessTokenController
         }
         return app(ApiResponse::class)->success(['token' => $tokenInfo, 'user' => app(AuthService::class)->getUserData(app(OauthService::class)->getUserByAccessToken($tokenInfo->access_token))], 'Token generated successfully');
     }
-
-
 }

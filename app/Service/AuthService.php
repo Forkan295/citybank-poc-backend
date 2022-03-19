@@ -39,7 +39,11 @@ class AuthService
     }
 
 
-    public function getUserAccounts($user): array
+    /**
+     * @param $user
+     * @return array|mixed
+     */
+    public function getUserAccounts($user)
     {
         $content = [];
         if (!blank($user->accounts)) {
