@@ -18,16 +18,20 @@
         <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     </head>
-    <body class="h-full">
-        <div class="h-full bg-gray-100">
-            <div class="fixed inset-0 flex z-40 md:hidden" role="dialog" aria-modal="true">
-                @include('layouts.sidebar')
+    <body class="bg-gray-100">
+        <div class="fixed inset-0 flex z-40 md:hidden" role="dialog" aria-modal="true">
+            @include('layouts.sidebar')
 
-                <main class="flex-1">
+            <div class="min-h-screen flex flex-col">
+                <div class="flex-grow">
                     @yield('content')
-                </main>
+                </div>
+
+                <div>
+                    @include('layouts.footer')
+                </div>
             </div>
         </div>
-    @stack('scripts')
+        @stack('scripts')
     </body>
 </html>
