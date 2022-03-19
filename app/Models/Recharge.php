@@ -11,11 +11,11 @@ class Recharge extends Model
     use HasFactory;
 
     protected $fillable = [
-    	'transaction_id',
-    	'operator_id',
-    	'phone_number',
-    	'recharge_amount',
-    	'status',
+        'transaction_id',
+        'operator_id',
+        'phone_number',
+        'recharge_amount',
+        'status',
     ];
 
     /**
@@ -24,5 +24,10 @@ class Recharge extends Model
     public function transaction(): BelongsTo
     {
         return $this->belongsTo(Transaction::class, 'transaction_id');
+    }
+
+    public function operator(): BelongsTo
+    {
+        return $this->belongsTo(MobileOperator::class, 'operator_id');
     }
 }

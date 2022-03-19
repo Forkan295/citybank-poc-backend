@@ -9,7 +9,6 @@ use App\Http\Resources\BeneficiaryResource;
 use App\Http\Response\ApiResponse;
 use App\Models\Beneficiary;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 
 
 class BeneficiaryController extends Controller
@@ -42,18 +41,7 @@ class BeneficiaryController extends Controller
             return app(ApiResponse::class)->success('', MessageEnum::SUCCESS);
         } catch (\Exception $exception) {
             return app(ApiResponse::class)->error($exception->getMessage());
-        }   
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
+        }
     }
 
     /**

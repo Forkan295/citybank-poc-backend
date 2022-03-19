@@ -15,7 +15,7 @@ class RechargeRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return auth()->check();
     }
 
     /**
@@ -41,8 +41,8 @@ class RechargeRequest extends FormRequest
 
         return [
             'operator_name' => [
-                'required', 
-                'string', 
+                'required',
+                'string',
                 Rule::in(['grameenphone', 'banglalink', 'airtel', 'robi', 'teletalk'])
             ],
             'phone_number' => $rules,

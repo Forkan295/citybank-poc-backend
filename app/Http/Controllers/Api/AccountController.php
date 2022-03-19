@@ -36,7 +36,7 @@ class AccountController extends Controller
             $user           = auth('api')->user();
             $primaryAccount = $user->accounts()->isPrimaryAccount()->first();
             $amount         = data_get($request, 'amount');
-            $prepareData    = app(AuthService::class)->prepareTransferData($request, $primaryAccount);
+            $prepareData    = app(AuthService::class)->prepareTransactionData($request, $primaryAccount);
             $verify         = Otp::validate($user->phone, $request->otp);
 
             if (!$verify->status) {
@@ -59,7 +59,7 @@ class AccountController extends Controller
         }
     }
 
-    public function getTransaction(Request $request): JsonResponse
+    public function getTransactions(Request $request): JsonResponse
     {
         try {
             $authService = new AuthService();
