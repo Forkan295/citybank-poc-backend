@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8" style="min-height: 450px">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
     <div class="py-4">
         <div class="px-4 sm:px-6 lg:px-8">
             <div class="sm:flex sm:items-center">
@@ -57,5 +57,4 @@
         </div>
     </div>
 </div>
-@include('layouts.footer')
 @endsection

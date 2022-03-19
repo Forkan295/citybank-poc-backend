@@ -43,11 +43,15 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
         'remember_token',
     ];
 
-    const ADMIN = 1;
-    const CLIENT = 2;
+    const OAUTH2ADMIN = 'oauth';
+    const APIADMIN = 'api';
+    const BANKCLIENT = 'bank_client';
+    const CLIENT = 'client';
 
     public static $role = [
-        self::ADMIN => 'Admin',
+        self::OAUTH2ADMIN => 'OAuth2 Admin',
+        self::APIADMIN => 'Api Admin',
+        self::BANKCLIENT => 'Bank Client',
         self::CLIENT => 'Client',
     ];
 
