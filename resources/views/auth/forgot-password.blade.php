@@ -2,11 +2,7 @@
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">
-                @if (request()->getHost() == config('app.sub_domain'))
-                    <img src="{{ asset('assets/img/pwa_logo.jpeg') }}" alt="Logo">
-                @else
-                    <img src="{{ asset('assets/img/OAuth2_logo.jpeg') }}" alt="Logo">
-                @endif
+                <img src="{{ asset('assets/img/OAuth2_logo.jpeg') }}" alt="Logo">
             </a>
         </x-slot>
 

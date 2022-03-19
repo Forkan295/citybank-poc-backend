@@ -45,13 +45,11 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
 
     const OAUTH2ADMIN = 'oauth';
     const APIADMIN = 'api';
-    const BANKCLIENT = 'bank_client';
     const CLIENT = 'client';
 
     public static $role = [
         self::OAUTH2ADMIN => 'OAuth2 Admin',
         self::APIADMIN => 'Api Admin',
-        self::BANKCLIENT => 'Bank Client',
         self::CLIENT => 'Client',
     ];
 
