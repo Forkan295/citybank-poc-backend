@@ -61,7 +61,7 @@ Route::group(['name' => 'v1.', 'middleware' => 'apilogger'], function () {
 
         Route::group(['prefix' => 'common'], function () {
             Route::get('/banks', [ApiController::class, 'getBanks'])->name('common.banks');
-            Route::get('/transaction-types',[ApiController::class, 'getTransactionTypes'])->name('common.transaction-types');
+            Route::get('/transaction-types',[ApiController::class, 'getTransactionType'])->name('common.transaction-types');
             Route::get('/mobile-operators', [ApiController::class, 'getOperators'])->name('common.mobile-operators');
             Route::post('/send-otp', [ApiController::class, 'generateOtp'])->name('common.send-otp');
         });
