@@ -5,8 +5,9 @@ namespace App\Service;
 
 
 use Carbon\Carbon;
-use FG\ASN1\Universal\Boolean;
+use App\Models\User;
 use Illuminate\Http\Request;
+use FG\ASN1\Universal\Boolean;
 
 class AuthService
 {
@@ -18,6 +19,22 @@ class AuthService
             'email'    => 'required|email:rfc,dns',
             'password' => 'required'
         ];
+    }
+
+    public function register($request)
+    {
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'role' => User::BANKCLIENT,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            
+
+        ]);
+        return $user;
+
     }
 
 

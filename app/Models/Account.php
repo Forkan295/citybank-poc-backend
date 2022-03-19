@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Account extends Model
 {
@@ -20,7 +21,7 @@ class Account extends Model
         'user_id',
         'account_no',
         'type_id',
-        'opening_date',
+        'date_opened',
         'balance',
         'is_primary',
         'status',
@@ -29,6 +30,8 @@ class Account extends Model
     protected $casts = [
         'is_primary' => 'boolean'
     ];
+
+    Const PRIMARY_TYPE_ID = 2;
 
     /**
      * @return BelongsTo
@@ -60,5 +63,16 @@ class Account extends Model
     public function scopeIsPrimaryAccount($query)
     {
         $query->where('is_primary', 1);
+    }
+
+    public function generateUniqueAccountNumber()
+    {
+        $accountNumber = random_int(100000000, 9999999999);
+
+        if (Account::where('account_no', $accountNumber)->exists()) {
+            return $this->generateUniqueAccountNumber();
+        }
+
+        return $accountNumber;
     }
 }

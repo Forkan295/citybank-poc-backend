@@ -24,6 +24,7 @@ use App\Http\Controllers\Auth\WebAuthnRegisterController;
 
 Route::group(['name' => 'v1.', 'middleware' => 'apilogger'], function () {
     Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/registration', [AuthController::class, 'registration']);
     Route::get('/authorize', [AthorizeController::class, 'getAuthorization'])->name('v1.authorize');
     Route::post('/token', [AthorizeController::class, 'token'])->name('v1.token');
 
