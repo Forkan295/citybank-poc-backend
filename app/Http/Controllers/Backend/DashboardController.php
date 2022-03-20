@@ -12,11 +12,11 @@ class DashboardController extends Controller
     {
     	$totalOauth2Admin = $this->getUserByRole('oauth')->count();
     	$totalApiAdmin = $this->getUserByRole('api')->count();
-    	$totalBankClient = $this->getUserByRole('client')->count();
+    	$totalBankClient = $this->getUserByRole('bank_client')->count();
 
     	$totalUser = $totalApiAdmin + $totalOauth2Admin + $totalBankClient;
     	
-    	$users = $this->getUserByRole('client')
+    	$users = $this->getUserByRole('bank_client')
     					->latest()
     					->take(10)
     					->get();
